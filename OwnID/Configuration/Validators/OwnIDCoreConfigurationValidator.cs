@@ -88,7 +88,11 @@ namespace OwnID.Configuration.Validators
                     $"FIDO2 is disabled, but '{nameof(options.Fido2FallbackBehavior)}' is set to '{nameof(Fido2FallbackBehavior.Block)}'");
             }
 
-            return options.ProfileConfiguration.Validate();
+            
+            if (options.ProfileConfiguration != null)
+                return options.ProfileConfiguration.Validate();
+
+            return ValidateOptionsResult.Success;
         }
     }
 }

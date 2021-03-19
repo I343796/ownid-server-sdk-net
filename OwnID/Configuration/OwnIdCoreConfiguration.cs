@@ -58,7 +58,7 @@ namespace OwnID.Configuration
 
         public RSA JwtSignCredentials { get; set; }
 
-        public IProfileConfiguration ProfileConfiguration { get; private set; }
+        public IProfileConfiguration ProfileConfiguration { get; set; }
 
         public string DID
         {
@@ -96,7 +96,7 @@ namespace OwnID.Configuration
 
         public Fido2FallbackBehavior Fido2FallbackBehavior { get; set; } = Fido2FallbackBehavior.Passcode;
 
-        public IFido2Configuration Fido2 { get; } = new Fido2Configuration();
+        public IFido2Configuration Fido2 { get; set; } = new Fido2Configuration();
 
         public LogLevel LogLevel { get; set; } = LogLevel.Information;
 
