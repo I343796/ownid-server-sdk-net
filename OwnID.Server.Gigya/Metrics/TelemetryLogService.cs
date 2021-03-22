@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Cache;
 using OwnID.Extensibility.Logs;
-using OwnID.Extensions;
 using OwnID.Redis;
 
 namespace OwnID.Server.Gigya.Metrics

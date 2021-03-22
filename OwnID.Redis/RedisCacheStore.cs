@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Cache;
 using OwnID.Extensibility.Configuration;
@@ -16,16 +15,12 @@ namespace OwnID.Redis
         private readonly ILogger<RedisCacheStore> _logger;
         private readonly IDatabase _redisDb;
 
-        public RedisCacheStore(IConfiguration configuration, IOwnIdCoreConfiguration coreConfiguration,
-            ILogger<RedisCacheStore> logger) : this(
-            configuration.GetSection("ownid")?["cache_config"])
+        public RedisCacheStore(string configurationString, IOwnIdCoreConfiguration coreConfiguration,
+            ILogger<RedisCacheStore> logger)
         {
             _logger = logger;
             _keyPrefix = coreConfiguration.DID;
-        }
 
-        public RedisCacheStore(string configurationString)
-        {
             if (string.IsNullOrEmpty(configurationString))
                 throw new ArgumentException("No configuration was provided");
 

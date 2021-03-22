@@ -153,11 +153,21 @@ namespace OwnID.Web.Configuration
         }
 
         /// <summary>
+        ///     Defines usage of any <see cref="ICacheStore" /> implementation to store technical authorization data
+        /// </summary>
+        /// <param name="cacheStoreFactory">cache store factory</param>
+        /// <param name="serviceLifetime">cache store lifetime</param>
+        public void UseCacheStore<TStore>(ServiceLifetime serviceLifetime, Func<IServiceProvider, TStore> cacheStoreFactory) where TStore : class, ICacheStore
+        {
+            WithFeature<CacheStoreFeature>(x => x.UseStore(serviceLifetime, cacheStoreFactory));
+        }
+
+        /// <summary>
         ///     Defines usage of In Memory Cache Store
         /// </summary>
         public void UseInMemoryCacheStore()
         {
-            WithFeature<CacheStoreFeature>(x => x.UseStoreInMemoryStore());
+            WithFeature<CacheStoreFeature>(x => x.UseInMemoryStore());
         }
 
         /// <summary>

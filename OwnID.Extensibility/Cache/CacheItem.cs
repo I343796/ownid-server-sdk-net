@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using OwnID.Extensibility.Flow;
-using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Flow.Contracts.Cookies;
 using OwnID.Extensibility.Flow.Contracts.Start;
 
