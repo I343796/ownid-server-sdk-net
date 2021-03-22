@@ -100,7 +100,13 @@ namespace OwnID.Server.Gigya
                         builder.UseWebCacheStore();
                         break;
                     case "redis":
-                        builder.UseCacheStore<RedisCacheStore>(ServiceLifetime.Singleton);
+                        builder.UseCacheStore(ServiceLifetime.Singleton, provider =>
+                        {
+                            var configuration = provider.GetService<IOwnIdCoreConfiguration>();
+                            var logger = provider.GetService<ILogger<RedisCacheStore>>();
+                            return new RedisCacheStore(Configuration.GetSection("ownid")?["cache_config"],
+                                configuration, logger);
+                        });
                         break;
                 }
 
@@ -126,7 +132,7 @@ namespace OwnID.Server.Gigya
                     x.TFAEnabled = ownIdSection.GetValue("tfa_enabled", true);
                     x.Fido2FallbackBehavior =
                         ownIdSection.GetValue("fido2_fallback_behavior", Fido2FallbackBehavior.Passcode);
-                    
+
                     // FIDO2 configuration
                     if (!string.IsNullOrWhiteSpace(ownIdSection["fido2_passwordless_page_url"]))
                         x.Fido2.PasswordlessPageUrl = new Uri(ownIdSection["fido2_passwordless_page_url"]);
@@ -140,7 +146,7 @@ namespace OwnID.Server.Gigya
                         x.Fido2.Origin = new Uri(ownIdSection["fido2_origin"]);
 
                     x.LogLevel = Configuration.GetValue("Serilog:MinimumLevel:Default", LogLevel.Information);
-                    
+
                     //for development cases
                     x.IsDevEnvironment = serverMode == ServerMode.Local;
                 });
@@ -207,9 +213,9 @@ namespace OwnID.Server.Gigya
                 .AddContentTypeOptionsNoSniff());
 
             var logger = app.ApplicationServices.GetService<ILogger<LogRequestMiddleware>>();
-            if(logger?.IsEnabled(LogLevel.Debug) ?? false)
+            if (logger?.IsEnabled(LogLevel.Debug) ?? false)
                 app.UseMiddleware<LogRequestMiddleware>();
-            
+
             app.UseMetrics();
             app.UseOwnId();
 

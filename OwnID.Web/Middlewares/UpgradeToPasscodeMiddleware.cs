@@ -1,12 +1,8 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Flow.Contracts.Jwt;
-using OwnID.Extensibility.Flow.Contracts.Start;
 using OwnID.Flow;
 using OwnID.Flow.Interfaces;
 using OwnID.Web.Attributes;

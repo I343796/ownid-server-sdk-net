@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using OwnID.Extensibility.Cache;
-using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Flow.Contracts.Cookies;
 
 namespace OwnID.Services
