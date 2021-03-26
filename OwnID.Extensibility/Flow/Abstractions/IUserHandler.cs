@@ -41,6 +41,13 @@ namespace OwnID.Extensibility.Flow.Abstractions
         Task UpdateProfileAsync(IUserProfileFormContext<TProfile> context);
 
         /// <summary>
+        /// Creates user with connection
+        /// </summary>
+        /// <param name="did">User unique identifier</param>
+        /// <param name="ownIdConnection">Connection that should be added</param>
+        Task<AuthResult<object>> RegisterPartialAsync(string did, OwnIdConnection ownIdConnection);
+        
+        /// <summary>
         ///     Will be called whenever a user waits for authorization credentials on success login. Data passed to
         ///     <see cref="AuthResult{T}" /> will be sent to OwnId UI SDK and passed to provided in configuration callback
         /// </summary>

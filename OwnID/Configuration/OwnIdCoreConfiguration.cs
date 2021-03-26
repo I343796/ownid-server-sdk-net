@@ -99,6 +99,8 @@ namespace OwnID.Configuration
         public IFido2Configuration Fido2 { get; set; } = new Fido2Configuration();
 
         public LogLevel LogLevel { get; set; } = LogLevel.Information;
+        
+        public bool LoginOnlyEnabled { get; set; }
 
         /// <summary>
         ///     Sets <see cref="ProfileConfiguration" /> based on <typeparamref name="TProfile" />

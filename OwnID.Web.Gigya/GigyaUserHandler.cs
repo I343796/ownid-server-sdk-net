@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -26,6 +27,11 @@ namespace OwnID.Web.Gigya
             _restApiClient = restApiClient;
             _configuration = configuration;
             _logger = logger;
+        }
+
+        public async Task<AuthResult<object>> RegisterPartialAsync(string did, OwnIdConnection ownIdConnection)
+        {
+            throw new NotSupportedException();
         }
 
         public async Task<AuthResult<object>> OnSuccessLoginAsync(string did, string publicKey)

@@ -57,6 +57,11 @@ namespace OwnID.Flow.Adapters
             return _adaptee.IsFido2UserExists(fido2CredentialId);
         }
 
+        public Task<AuthResult<object>> RegisterPartialAsync(string did, OwnIdConnection ownIdConnection)
+        {
+            return _adaptee.RegisterPartialAsync(did, ownIdConnection);
+        }
+
         public async Task<AuthResult<object>> OnSuccessLoginAsync(string did, string publicKey)
         {
             return await _adaptee.OnSuccessLoginAsync(did, publicKey);

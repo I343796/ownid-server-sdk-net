@@ -10,12 +10,12 @@ namespace OwnID.Flow.Setups.Partial
 {
     public abstract class BasePartialFlow : BaseFlow
     {
-        private readonly IOwnIdCoreConfiguration _coreConfiguration;
+        protected readonly IOwnIdCoreConfiguration CoreConfiguration;
 
         protected BasePartialFlow(IServiceProvider serviceProvider, FlowType flowType,
             IOwnIdCoreConfiguration coreConfiguration) : base(serviceProvider, flowType)
         {
-            _coreConfiguration = coreConfiguration;
+            CoreConfiguration = coreConfiguration;
             AddHandler<StopFlowTransitionHandler, TransitionInput>((_, item) => new FrontendBehavior
             {
                 Type = StepType.Stopped,
@@ -64,7 +64,7 @@ namespace OwnID.Flow.Setups.Partial
         protected FrontendBehavior TryAddFido2DisclaimerToBehavior(TransitionInput<AcceptStartRequest> input,
             CacheItem relatedItem, FrontendBehavior expectedBehavior)
         {
-            if (_coreConfiguration.TFAEnabled && _coreConfiguration.Fido2FallbackBehavior == Fido2FallbackBehavior.Basic
+            if (CoreConfiguration.TFAEnabled && CoreConfiguration.Fido2FallbackBehavior == Fido2FallbackBehavior.Basic
                                               && !input.Data.SupportsFido2
                                               && relatedItem.ChallengeType != ChallengeType.Login)
                 return new FrontendBehavior(StepType.Fido2Disclaimer, relatedItem.ChallengeType, expectedBehavior)

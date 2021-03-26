@@ -165,5 +165,9 @@ namespace OwnID.Extensibility.Configuration
         ///     Log level
         /// </summary>
         public LogLevel LogLevel { get; set; }
+        
+        //TODO: rework
+        
+        public bool LoginOnlyEnabled { get; set; }
     }
 }
