@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-gigya
+  name: single-server
 spec:
   template:
     spec:
