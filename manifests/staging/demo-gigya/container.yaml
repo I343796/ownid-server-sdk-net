@@ -9,7 +9,7 @@ spec:
         - name: server-gigya
           env:
             - name: OWNID__CALLBACK_URL
-              value: https://gigya.demo.staging.ownid.com
+              value: https://gigya.single.demo.staging.ownid.com
             - name: OWNID__DID
               value: did:ownid:demo_staging_151850889514
             - name: OWNID__NAME
@@ -23,4 +23,4 @@ spec:
             - name: OWNID__MAGIC_LINK__ENABLED
               value: 'true'
             - name: OWNID__MAGIC_LINK__REDIRECT_URL
-              value: https://gigya.staging.ownid.com/login
+              value: https://gigya.single.demo.staging.ownid.com/login
