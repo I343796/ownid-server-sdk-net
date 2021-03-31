@@ -10,8 +10,6 @@ spec:
           env:
             - name: OWNID__WEB_APP_URL
               value: https://sign.dev.ownid.com
-            - name: OWNID__ADD_CORS_ORIGINS
-              value: https://demo-screens.dev.ownid.com
             - name: ASPNETCORE_ENVIRONMENT
               value: dev
             - name: SMTP__HOST

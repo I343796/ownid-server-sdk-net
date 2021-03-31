@@ -9,7 +9,7 @@ spec:
         - name: server-gigya
           env:
             - name: OWNID__CALLBACK_URL
-              value: https://server.demo.dev.ownid.com
+              value: https://gigya.demo.dev.ownid.com
             - name: OWNID__DID
               value: did:ownid:demo_dev_151850889514
             - name: OWNID__NAME

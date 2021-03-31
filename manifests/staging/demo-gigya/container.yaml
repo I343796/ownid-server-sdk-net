@@ -9,20 +9,18 @@ spec:
         - name: server-gigya
           env:
             - name: OWNID__CALLBACK_URL
-              value: https://server.demo3.staging.ownid.com
+              value: https://gigya.demo.staging.ownid.com
             - name: OWNID__DID
-              value: did:ownid:demo_3_staging_151850889514
+              value: did:ownid:demo_staging_151850889514
             - name: OWNID__NAME
-              value: Noted (OwnID Demo 3)
+              value: Noted (OwnID Demo)
             - name: OWNID__DESCRIPTION
-              value: Noted (OwnID Demo 3)
-            - name: OWNID__FIDO2_FALLBACK_BEHAVIOR
-              value: Block
+              value: Noted (OwnID Demo)
             - name: OWNID__FIDO2_PASSWORDLESS_PAGE_URL
-              value: https://passwordless.demo3.staging.ownid.com
+              value: https://passwordless.demo.staging.ownid.com
             - name: OWNID__TOP_DOMAIN
-              value: demo3.staging.ownid.com
+              value: demo.staging.ownid.com
             - name: OWNID__MAGIC_LINK__ENABLED
-              value: 'false'
+              value: 'true'
             - name: OWNID__MAGIC_LINK__REDIRECT_URL
-              value: https://demo3.staging.ownid.com/login
+              value: https://gigya.staging.ownid.com/login
