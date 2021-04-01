@@ -2,9 +2,9 @@
 
 ENV=$1
 
-#Deploy Netcore3 Server-Gigya
+#Deploy .NET 5 Server-Gigya
 PKG_VERSION=$(xmllint --xpath "string(//Project/PropertyGroup/AssemblyVersion)" ./OwnID.Server.Gigya/OwnID.Server.Gigya.csproj)
-IMAGE_URI=$DOCKER_URL/$ENV/server/ownid-server-gigya:${PKG_VERSION-}
+IMAGE_URI=$DOCKER_URL/$ENV/single-server/ownid-server-gigya:${PKG_VERSION-}
 
 echo Docker push to $IMAGE_URI
 docker tag ownid-server-gigya:latest $IMAGE_URI
@@ -19,9 +19,9 @@ echo Update IMAGE in base kustomization.yaml
 echo Applications update
 
 if [ "$ENV" == "dev" ]; then
-  apps=(demo demo2 demo3 demo4 multilevel1 multilevel2 demo-screens)
+  apps=(demo-gigya)
 else
-  apps=(demo demo2 demo3 demo4 dor demo-screens)
+  apps=(demo-gigya dor)
 fi
 
 

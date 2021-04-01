@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PKG_VERSION=`xmllint --xpath "string(//Project/PropertyGroup/AssemblyVersion)" ./OwnID.Server.Gigya/OwnID.Server.Gigya.csproj`
-IMAGE_URI=$DOCKER_URL/prod/server/ownid-server-gigya:${PKG_VERSION-}
+IMAGE_URI=$DOCKER_URL/prod/single-server/ownid-server-gigya:${PKG_VERSION-}
 
 echo Docker push to $IMAGE_URI
 docker tag ownid-server-gigya:latest $IMAGE_URI

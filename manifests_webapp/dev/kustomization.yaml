@@ -5,3 +5,6 @@ resources:
   - ../base
 
 namespace: dev
+
+patchesStrategicMerge:
+- replica-and-rollout-strategy.yaml

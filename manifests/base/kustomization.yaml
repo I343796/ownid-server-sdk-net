@@ -6,5 +6,5 @@ resources:
 - service.yaml
 
 commonLabels:
-  app: server-gigya
+  app: single-server
 
