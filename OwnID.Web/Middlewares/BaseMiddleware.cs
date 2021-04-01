@@ -18,7 +18,7 @@ using OwnID.Web.Attributes;
 
 namespace OwnID.Web.Middlewares
 {
-    public abstract class BaseMiddleware
+    public abstract class BaseMiddleware : IOwnIDMiddleware
     {
         private const string ClientDateParameterName = "t";
         private const string ContextRouteName = "context";
