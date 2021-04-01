@@ -14,7 +14,7 @@ using OwnID.Services;
 
 namespace OwnID.Web.Middlewares
 {
-    public class MetricsMiddleware
+    public class MetricsMiddleware : IOwnIDMiddleware
     {
         private static readonly Regex ContextRegex = new(@"ownid\/(?<context>[^\/]*)\/.*", RegexOptions.Compiled);
         private readonly ICacheItemRepository _cacheItemRepository;
