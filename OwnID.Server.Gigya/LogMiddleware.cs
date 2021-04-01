@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Json;
 using OwnID.Extensibility.Logs;
-using OwnID.Extensions;
 using Serilog.Context;
 using Serilog.Core.Enrichers;
 

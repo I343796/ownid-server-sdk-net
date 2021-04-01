@@ -11,8 +11,8 @@ namespace OwnID.Web.Middlewares.MagicLink
     {
         private readonly ExchangeMagicLinkCommand _exchangeMagicLinkCommand;
 
-        public ExchangeMagicLinkMiddleware(RequestDelegate next, ILogger<ExchangeMagicLinkMiddleware> logger,
-            ExchangeMagicLinkCommand exchangeMagicLinkCommand) : base(next, logger)
+        public ExchangeMagicLinkMiddleware(ILogger<ExchangeMagicLinkMiddleware> logger,
+            ExchangeMagicLinkCommand exchangeMagicLinkCommand, RequestDelegate next = null) : base(next, logger)
         {
             _exchangeMagicLinkCommand = exchangeMagicLinkCommand;
         }

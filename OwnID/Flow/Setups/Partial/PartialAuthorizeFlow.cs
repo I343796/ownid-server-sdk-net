@@ -23,9 +23,14 @@ namespace OwnID.Flow.Setups.Partial
             AddHandler<ConnectionRestoreBaseTransitionHandler, TransitionInput>((_, item) =>
                 GetOnRecoveryConnectionPassedBehavior(item));
 
-            // 4. (optional) CheckUserExistence
-            AddHandler<CheckUserExistenceBaseTransitionHandler, TransitionInput<UserIdentification>>((_, item) =>
-                GetOnInstantAuthorizeBehavior(item));
+            if (!ownIdCoreConfiguration.LoginOnlyEnabled)
+                // 4. (optional) CheckUserExistence
+                AddHandler<CheckUserExistenceBaseTransitionHandler, TransitionInput<UserIdentification>>((_, item) =>
+                    GetOnInstantAuthorizeBehavior(item));
+            else
+                // 4. (optional) CheckUserExistence
+                AddHandler<CheckUserExistenceBaseTransitionHandler, TransitionInput<UserIdentification>>((_, item) =>
+                    GetOnInstantAuthorizeBehavior(item));
 
             // 5. InstantAuthorize
             AddHandler<InstantAuthorizeBaseTransitionHandler, TransitionInput<JwtContainer>>((_, item) =>
@@ -80,11 +85,12 @@ namespace OwnID.Flow.Setups.Partial
 
             return GetReferenceToExistingStep(nextStepType, item.Context, item.ChallengeType);
         }
-        
+
         private FrontendBehavior OnSuccess<T>(TransitionInput<T> _, CacheItem item)
         {
             var challengeType = item.ChallengeType;
-            if (item.ChallengeType == ChallengeType.Register && item.InitialChallengeType == ChallengeType.Login)
+            if (item.ChallengeType == ChallengeType.Register && item.InitialChallengeType == ChallengeType.Login
+                                                             && !CoreConfiguration.LoginOnlyEnabled)
                 challengeType = ChallengeType.LinkOnLogin;
 
             return FrontendBehavior.CreateSuccessFinish(challengeType);

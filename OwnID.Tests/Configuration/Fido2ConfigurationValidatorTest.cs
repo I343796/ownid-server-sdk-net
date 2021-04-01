@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using OwnID.Configuration;
+using OwnID.Configuration.Validators;
 using Xunit;
 
 namespace OwnID.Tests.Configuration

@@ -11,8 +11,8 @@ namespace OwnID.Web.Middlewares
     {
         private readonly AddConnectionCommand _addConnectionCommand;
 
-        public AddConnectionMiddleware(RequestDelegate next, ILogger<AddConnectionMiddleware> logger,
-            AddConnectionCommand addConnectionCommand) : base(next, logger)
+        public AddConnectionMiddleware(ILogger<AddConnectionMiddleware> logger,
+            AddConnectionCommand addConnectionCommand, RequestDelegate next = null) : base(next, logger)
         {
             _addConnectionCommand = addConnectionCommand;
         }

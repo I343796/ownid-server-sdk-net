@@ -8,20 +8,24 @@ using OwnID.Web.Store;
 
 namespace OwnID.Web.Features
 {
-    public class CacheStoreFeature : IFeatureConfiguration
+    public class CacheStoreFeature : IFeature
     {
         private ServiceLifetime _serviceLifetime;
         private Action<IServiceCollection> _servicesInitialization;
         private Type _storeType;
+        private Func<IServiceProvider, ICacheStore> _cacheStoreFactory;
 
         public void ApplyServices(IServiceCollection services)
         {
             _servicesInitialization?.Invoke(services);
-
-            services.TryAdd(new ServiceDescriptor(typeof(ICacheStore), _storeType, _serviceLifetime));
+            
+            if (_cacheStoreFactory != null)
+                services.TryAdd(new ServiceDescriptor(typeof(ICacheStore), _cacheStoreFactory, _serviceLifetime));
+            else if (_storeType != null)
+                services.TryAdd(new ServiceDescriptor(typeof(ICacheStore), _storeType, _serviceLifetime));
         }
 
-        public IFeatureConfiguration FillEmptyWithOptional()
+        public IFeature FillEmptyWithOptional()
         {
             if (_storeType == null)
             {
@@ -38,7 +42,7 @@ namespace OwnID.Web.Features
                 throw new InvalidOperationException("Store Type can not be null");
         }
 
-        public CacheStoreFeature UseStoreInMemoryStore()
+        public CacheStoreFeature UseInMemoryStore()
         {
             _storeType = typeof(InMemoryCacheStore);
             _serviceLifetime = ServiceLifetime.Singleton;
@@ -47,8 +51,7 @@ namespace OwnID.Web.Features
 
         public CacheStoreFeature UseWebCacheStore()
         {
-            _servicesInitialization =
-                services => services.AddMemoryCache();
+            _servicesInitialization = services => services.AddMemoryCache();
 
             _storeType = typeof(WebCacheStore);
             _serviceLifetime = ServiceLifetime.Singleton;
@@ -60,6 +63,16 @@ namespace OwnID.Web.Features
         {
             _serviceLifetime = serviceLifetime;
             _storeType = typeof(TStore);
+
+            return this;
+        }
+
+        public CacheStoreFeature UseStore<TStore>(ServiceLifetime serviceLifetime,
+            Func<IServiceProvider, TStore> cacheStoreFactory) where TStore : class, ICacheStore
+        {
+            _serviceLifetime = serviceLifetime;
+            _storeType = typeof(TStore);
+            _cacheStoreFactory = cacheStoreFactory;
 
             return this;
         }

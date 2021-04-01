@@ -9,7 +9,7 @@ using OwnID.Web.Resources;
 
 namespace OwnID.Web.Features
 {
-    public class LocalizationFeature : IFeatureConfiguration
+    public class LocalizationFeature : IFeature
     {
         private readonly string _resourceName;
 
@@ -57,7 +57,7 @@ namespace OwnID.Web.Features
             });
         }
 
-        public IFeatureConfiguration FillEmptyWithOptional()
+        public IFeature FillEmptyWithOptional()
         {
             return this;
         }

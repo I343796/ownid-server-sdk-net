@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using FluentAssertions;
 using OwnID.Configuration;
-using OwnID.Extensibility.Configuration;
+using OwnID.Configuration.Validators;
 using Xunit;
 
 namespace OwnID.Tests.Configuration
@@ -10,12 +10,12 @@ namespace OwnID.Tests.Configuration
     public class OwnIdConfigurationValidatorTest : IDisposable
     {
         private readonly RSA _sign;
-        private readonly OwnIdCoreConfigurationValidator _validator;
+        private readonly OwnIDCoreConfigurationValidator _validator;
 
         public OwnIdConfigurationValidatorTest()
         {
             _sign = RSA.Create();
-            _validator = new OwnIdCoreConfigurationValidator();
+            _validator = new OwnIDCoreConfigurationValidator();
         }
 
         public void Dispose()
@@ -26,14 +26,13 @@ namespace OwnID.Tests.Configuration
         [Theory]
         [InlineData(null)]
         [InlineData("http://test.com/")]
-        [InlineData(
-            "https://www.test.com/search/Le+Venezuela+b%C3%A9n%C3%A9ficie+d%27importantes+ressources+naturelles+%3A+p%C3%A9trole%2C+gaz%2C+mines")]
+        [InlineData("https://www.test.com/search/Le+Venezuela+b%C3%A9n%C3%A9ficie+d%27importantes+ressources+naturelles+%3A+p%C3%A9trole%2C+gaz%2C+mines")]
         [InlineData("https://test.com/?a=1")]
         public void Validate_Invalid_CallbackUrl(string value)
         {
             var config = GetValidConfiguration();
             config.OwnIdApplicationUrl = value != null ? new Uri(value) : null;
-            _validator.Validate(string.Empty, config).Failed.Should().BeTrue();
+            _validator.ValidateInternal(config).Failed.Should().BeTrue();
         }
 
         [Theory]
@@ -46,7 +45,7 @@ namespace OwnID.Tests.Configuration
         {
             var config = GetValidConfiguration();
             config.OwnIdApplicationUrl = value != null ? new Uri(value) : null;
-            _validator.Validate(string.Empty, config).Failed.Should().BeTrue();
+            _validator.ValidateInternal(config).Failed.Should().BeTrue();
         }
 
         [Theory]
@@ -57,7 +56,7 @@ namespace OwnID.Tests.Configuration
         {
             var config = GetValidConfiguration();
             config.DID = value;
-            _validator.Validate(string.Empty, config).Failed.Should().BeTrue();
+            _validator.ValidateInternal(config).Failed.Should().BeTrue();
         }
 
         [Theory]
@@ -68,7 +67,7 @@ namespace OwnID.Tests.Configuration
         {
             var config = GetValidConfiguration();
             config.Name = value;
-            _validator.Validate(string.Empty, config).Failed.Should().BeTrue();
+            _validator.ValidateInternal(config).Failed.Should().BeTrue();
         }
 
         private OwnIdCoreConfiguration GetValidConfiguration()
@@ -96,7 +95,7 @@ namespace OwnID.Tests.Configuration
         {
             var config = GetValidConfiguration();
             config.JwtSignCredentials = null;
-            _validator.Validate(string.Empty, config).Failed.Should().BeTrue();
+            _validator.ValidateInternal(config).Failed.Should().BeTrue();
         }
     }
 }

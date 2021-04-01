@@ -16,8 +16,8 @@ namespace OwnID.Web.Middlewares
         private readonly ICookieService _cookieService;
         private readonly IFlowRunner _flowRunner;
 
-        public StartFlowMiddleware(RequestDelegate next, IFlowRunner flowRunner, ILogger<StartFlowMiddleware> logger,
-            ICookieService cookieService) : base(next, logger)
+        public StartFlowMiddleware(IFlowRunner flowRunner, ILogger<StartFlowMiddleware> logger,
+            ICookieService cookieService, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
             _cookieService = cookieService;

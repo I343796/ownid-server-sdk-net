@@ -1,12 +1,8 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Flow.Contracts.Jwt;
-using OwnID.Extensibility.Flow.Contracts.Start;
 using OwnID.Flow;
 using OwnID.Flow.Interfaces;
 using OwnID.Web.Attributes;
@@ -18,8 +14,8 @@ namespace OwnID.Web.Middlewares
     {
         private readonly IFlowRunner _flowRunner;
 
-        public UpgradeToPasscodeMiddleware(RequestDelegate next, ILogger<CheckUserExistenceMiddleware> logger,
-            IFlowRunner flowRunner) : base(next, logger)
+        public UpgradeToPasscodeMiddleware(ILogger<UpgradeToPasscodeMiddleware> logger,
+            IFlowRunner flowRunner, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

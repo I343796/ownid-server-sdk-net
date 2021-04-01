@@ -39,7 +39,7 @@ jobs:
       run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD $DOCKER_URL
 
     - name: Test
-      run: dotnet test /p:CollectCoverage=true /p:Threshold=18 /p:ThresholdStat=total
+      run: dotnet test /p:CollectCoverage=true /p:Threshold=17 /p:ThresholdStat=total
 
     - name: Build
       run: docker build -f gigya-server.Dockerfile -t ownid-server-gigya:latest . --network=host

@@ -7,7 +7,7 @@ using OwnID.Web.Extensibility;
 
 namespace OwnID.Web.Features
 {
-    public class UserHandlerFeature : IFeatureConfiguration
+    public class UserHandlerFeature : IFeature
     {
         private Action<IServiceCollection> _applyServicesAction;
 
@@ -16,7 +16,7 @@ namespace OwnID.Web.Features
             _applyServicesAction(services);
         }
 
-        public IFeatureConfiguration FillEmptyWithOptional()
+        public IFeature FillEmptyWithOptional()
         {
             return this;
         }

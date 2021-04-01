@@ -1,6 +1,6 @@
-namespace OwnID.Web.Gigya
+namespace OwnID.Web.Gigya.Configuration
 {
-    public class GigyaConfiguration
+    public class GigyaConfiguration : IGigyaConfiguration
     {
         public string DataCenter { get; set; }
 

@@ -3,21 +3,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OwnID.Commands.MagicLink;
 using OwnID.Configuration;
+using OwnID.Configuration.Validators;
 using OwnID.Extensibility.Configuration;
+using OwnID.Extensibility.Configuration.Validators;
 using OwnID.Web.Attributes;
 using OwnID.Web.Extensibility;
 
 namespace OwnID.Web.Features
 {
     [FeatureDependency(typeof(CoreFeature))]
-    public class MagicLinkFeature : IFeatureConfiguration
+    public class MagicLinkFeature : IFeature
     {
-        private readonly IMagicLinkConfiguration _configuration;
+        private readonly IMagicLinkConfiguration _configuration = new MagicLinkConfiguration();
 
-        public MagicLinkFeature()
-        {
-            _configuration = new MagicLinkConfiguration();
-        }
+        private readonly IConfigurationValidator<IMagicLinkConfiguration> _validator =
+            new MagicLinkConfigurationValidator();
 
         public void ApplyServices(IServiceCollection services)
         {
@@ -26,20 +26,17 @@ namespace OwnID.Web.Features
             services.TryAddSingleton(_configuration);
         }
 
-        public IFeatureConfiguration FillEmptyWithOptional()
+        public IFeature FillEmptyWithOptional()
         {
-            if (_configuration.TokenLifetime == default)
-                _configuration.TokenLifetime = (uint) TimeSpan.FromMinutes(10).TotalMilliseconds;
-
+            _validator.FillEmptyWithOptional(_configuration);
             return this;
         }
 
         public void Validate()
         {
-            if (!OwnIdCoreConfigurationValidator.IsUriValid($"MagicLink.{nameof(_configuration.RedirectUrl)}",
-                _configuration.RedirectUrl, true, out var errMessage))
-                throw new InvalidOperationException(errMessage);
+            _validator.Validate(_configuration);
         }
+
 
         public MagicLinkFeature WithConfiguration(Action<IMagicLinkConfiguration> setupAction)
         {

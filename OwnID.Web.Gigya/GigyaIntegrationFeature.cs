@@ -1,20 +1,19 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using OwnID.Extensibility.Configuration.Validators;
 using OwnID.Web.Extensibility;
 using OwnID.Web.Gigya.ApiClient;
+using OwnID.Web.Gigya.Configuration;
 
 namespace OwnID.Web.Gigya
 {
-    public class GigyaIntegrationFeature : IFeatureConfiguration
+    public class GigyaIntegrationFeature : IFeature
     {
-        private readonly GigyaConfiguration _configuration;
+        private readonly IGigyaConfiguration _configuration = new GigyaConfiguration();
+        private readonly IConfigurationValidator<IGigyaConfiguration> _validator = new GigyaConfigurationValidator();
+        
         private Action<IServiceCollection> _setupServicesAction;
-
-        public GigyaIntegrationFeature()
-        {
-            _configuration = new GigyaConfiguration();
-        }
 
         public void ApplyServices(IServiceCollection services)
         {
@@ -22,21 +21,18 @@ namespace OwnID.Web.Gigya
             _setupServicesAction?.Invoke(services);
         }
 
-        public IFeatureConfiguration FillEmptyWithOptional()
+        public IFeature FillEmptyWithOptional()
         {
+            _validator.FillEmptyWithOptional(_configuration);
             return this;
         }
 
         public void Validate()
         {
-            if (string.IsNullOrWhiteSpace(_configuration.ApiKey) ||
-                string.IsNullOrWhiteSpace(_configuration.SecretKey) ||
-                string.IsNullOrWhiteSpace(_configuration.DataCenter))
-                throw new InvalidOperationException(
-                    $"{nameof(_configuration.ApiKey)}, {nameof(_configuration.SecretKey)} and {nameof(_configuration.DataCenter)} should be provided");
+            _validator.Validate(_configuration);
         }
 
-        public GigyaIntegrationFeature WithConfig<TProfile>(Action<GigyaConfiguration> configAction)
+        public GigyaIntegrationFeature WithConfig<TProfile>(Action<IGigyaConfiguration> configAction)
             where TProfile : class, IGigyaUserProfile
         {
             configAction(_configuration);

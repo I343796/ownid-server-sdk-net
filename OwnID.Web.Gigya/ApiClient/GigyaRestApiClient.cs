@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OwnID.Extensibility.Json;
 using OwnID.Extensibility.Logs;
+using OwnID.Web.Gigya.Configuration;
 using OwnID.Web.Gigya.Contracts;
 using OwnID.Web.Gigya.Contracts.Accounts;
 using OwnID.Web.Gigya.Contracts.Jwt;
@@ -17,14 +18,14 @@ namespace OwnID.Web.Gigya.ApiClient
 {
     public class GigyaRestApiClient<TProfile> where TProfile : class, IGigyaUserProfile
     {
-        private readonly GigyaConfiguration _configuration;
+        private readonly IGigyaConfiguration _configuration;
         private readonly HttpClient _httpClient;
         private readonly ILogger<GigyaRestApiClient<TProfile>> _logger;
         private readonly bool _logResponse;
         private readonly ConcurrentDictionary<GigyaFields, string> _profileFieldsCache = new();
 
 
-        public GigyaRestApiClient(GigyaConfiguration configuration, IHttpClientFactory httpClientFactory,
+        public GigyaRestApiClient(IGigyaConfiguration configuration, IHttpClientFactory httpClientFactory,
             ILogger<GigyaRestApiClient<TProfile>> logger)
         {
             _configuration = configuration;

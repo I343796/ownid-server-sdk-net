@@ -13,8 +13,8 @@ namespace OwnID.Web.Middlewares
     {
         private readonly GetStatusCommand _getStatusCommand;
 
-        public GetChallengeStatusMiddleware(RequestDelegate next, GetStatusCommand getStatusCommand,
-            ILogger<GetChallengeStatusMiddleware> logger) : base(next, logger)
+        public GetChallengeStatusMiddleware(GetStatusCommand getStatusCommand,
+            ILogger<GetChallengeStatusMiddleware> logger, RequestDelegate next = null) : base(next, logger)
         {
             _getStatusCommand = getStatusCommand;
         }

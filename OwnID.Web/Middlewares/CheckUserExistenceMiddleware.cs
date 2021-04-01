@@ -14,8 +14,8 @@ namespace OwnID.Web.Middlewares
     {
         private readonly IFlowRunner _flowRunner;
 
-        public CheckUserExistenceMiddleware(RequestDelegate next, ILogger<CheckUserExistenceMiddleware> logger,
-            IFlowRunner flowRunner) : base(next, logger)
+        public CheckUserExistenceMiddleware(ILogger<CheckUserExistenceMiddleware> logger,
+            IFlowRunner flowRunner, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

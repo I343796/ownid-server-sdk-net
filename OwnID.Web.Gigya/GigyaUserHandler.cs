@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Flow.Contracts.Fido2;
 using OwnID.Extensibility.Flow.Contracts.Internal;
 using OwnID.Web.Gigya.ApiClient;
+using OwnID.Web.Gigya.Configuration;
 using OwnID.Web.Gigya.Contracts;
 using OwnID.Web.Gigya.Contracts.Accounts;
 
@@ -15,16 +17,21 @@ namespace OwnID.Web.Gigya
 {
     public class GigyaUserHandler<TProfile> : IUserHandler<TProfile> where TProfile : class, IGigyaUserProfile
     {
-        private readonly GigyaConfiguration _configuration;
+        private readonly IGigyaConfiguration _configuration;
         private readonly ILogger<GigyaUserHandler<TProfile>> _logger;
         private readonly GigyaRestApiClient<TProfile> _restApiClient;
 
-        public GigyaUserHandler(GigyaRestApiClient<TProfile> restApiClient, GigyaConfiguration configuration,
+        public GigyaUserHandler(GigyaRestApiClient<TProfile> restApiClient, IGigyaConfiguration configuration,
             ILogger<GigyaUserHandler<TProfile>> logger)
         {
             _restApiClient = restApiClient;
             _configuration = configuration;
             _logger = logger;
+        }
+
+        public async Task<AuthResult<object>> RegisterPartialAsync(string did, OwnIdConnection ownIdConnection)
+        {
+            throw new NotSupportedException();
         }
 
         public async Task<AuthResult<object>> OnSuccessLoginAsync(string did, string publicKey)

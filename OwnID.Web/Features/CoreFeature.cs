@@ -8,8 +8,10 @@ using OwnID.Commands.Fido2;
 using OwnID.Commands.Pin;
 using OwnID.Commands.Recovery;
 using OwnID.Configuration;
+using OwnID.Configuration.Validators;
 using OwnID.Cryptography;
 using OwnID.Extensibility.Configuration;
+using OwnID.Extensibility.Configuration.Validators;
 using OwnID.Extensibility.Providers;
 using OwnID.Flow;
 using OwnID.Flow.Interfaces;
@@ -24,14 +26,12 @@ using OwnID.Web.Extensibility;
 
 namespace OwnID.Web.Features
 {
-    public class CoreFeature : IFeatureConfiguration
+    public class CoreFeature : IFeature
     {
-        private readonly OwnIdCoreConfiguration _configuration;
+        private readonly OwnIdCoreConfiguration _configuration = new();
 
-        public CoreFeature()
-        {
-            _configuration = new OwnIdCoreConfiguration();
-        }
+        private readonly IConfigurationValidator<OwnIdCoreConfiguration> _validator =
+            new OwnIDCoreConfigurationValidator();
 
         public void ApplyServices(IServiceCollection services)
         {
@@ -109,48 +109,16 @@ namespace OwnID.Web.Features
             });
         }
 
-        public IFeatureConfiguration FillEmptyWithOptional()
+        public IFeature FillEmptyWithOptional()
         {
-            _configuration.OwnIdApplicationUrl ??= new Uri(Constants.OwinIdApplicationAddress);
+            _validator.FillEmptyWithOptional(_configuration);
 
-            if (_configuration.CacheExpirationTimeout == default)
-                _configuration.CacheExpirationTimeout = (uint) TimeSpan.FromMinutes(10).TotalMilliseconds;
-
-            if (_configuration.JwtExpirationTimeout == default)
-                _configuration.JwtExpirationTimeout = (uint) TimeSpan.FromMinutes(60).TotalMilliseconds;
-
-            if (_configuration.PollingInterval == default)
-                _configuration.PollingInterval = 2000;
-
-            if (_configuration.MaximumNumberOfConnectedDevices == default)
-                _configuration.MaximumNumberOfConnectedDevices = 1;
-
-            if (string.IsNullOrWhiteSpace(_configuration.Fido2.RelyingPartyId))
-                _configuration.Fido2.RelyingPartyId = _configuration.Fido2.PasswordlessPageUrl?.Host;
-
-            if (string.IsNullOrWhiteSpace(_configuration.Fido2.RelyingPartyName))
-                _configuration.Fido2.RelyingPartyName = _configuration.Name;
-
-            if (string.IsNullOrWhiteSpace(_configuration.Fido2.UserName))
-                _configuration.Fido2.UserName = "Skip the password";
-
-            if (string.IsNullOrWhiteSpace(_configuration.Fido2.UserDisplayName))
-                _configuration.Fido2.UserDisplayName = _configuration.Fido2.UserName;
-
-            if (_configuration.Fido2.Origin == null)
-                _configuration.Fido2.Origin = _configuration.Fido2.PasswordlessPageUrl;
-            
             return this;
         }
 
         public void Validate()
         {
-            // TODO refactor
-            var validator = new OwnIdCoreConfigurationValidator();
-            var result = validator.Validate(string.Empty, _configuration);
-
-            if (result.Failed)
-                throw new InvalidOperationException(result.FailureMessage);
+            _validator.Validate(_configuration);
         }
 
         public CoreFeature WithConfiguration(Action<IOwnIdCoreConfiguration> setupAction)

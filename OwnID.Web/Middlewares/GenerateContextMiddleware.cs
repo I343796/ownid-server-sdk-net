@@ -11,8 +11,8 @@ namespace OwnID.Web.Middlewares
     {
         private readonly CreateFlowCommand _createFlowCommand;
 
-        public GenerateContextMiddleware(RequestDelegate next, CreateFlowCommand createFlowCommand,
-            ILogger<GenerateContextMiddleware> logger) : base(next, logger)
+        public GenerateContextMiddleware(CreateFlowCommand createFlowCommand, ILogger<GenerateContextMiddleware> logger,
+            RequestDelegate next = null) : base(next, logger)
         {
             _createFlowCommand = createFlowCommand;
         }

@@ -8,7 +8,7 @@ namespace OwnID.Web.Extensibility
     {
         IServiceCollection Services { get; }
 
-        void AddOrUpdateFeature<TFeature>([NotNull] TFeature feature) where TFeature : class, IFeatureConfiguration;
+        void AddOrUpdateFeature<TFeature>([NotNull] TFeature feature) where TFeature : class, IFeature;
 
         void UseAccountLinking<THandler>() where THandler : class, IAccountLinkHandler;
 

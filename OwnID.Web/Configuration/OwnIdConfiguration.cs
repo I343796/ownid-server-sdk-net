@@ -13,9 +13,9 @@ namespace OwnID.Web.Configuration
 {
     public class OwnIdConfiguration
     {
-        private readonly IReadOnlyDictionary<Type, IFeatureConfiguration> _features;
+        private readonly IReadOnlyDictionary<Type, IFeature> _features;
 
-        public OwnIdConfiguration([NotNull] IReadOnlyDictionary<Type, IFeatureConfiguration> features)
+        public OwnIdConfiguration([NotNull] IReadOnlyDictionary<Type, IFeature> features)
         {
             _features = features;
         }
@@ -23,7 +23,7 @@ namespace OwnID.Web.Configuration
         /// <summary>
         ///     Added features list
         /// </summary>
-        public IEnumerable<IFeatureConfiguration> Features => _features.Values;
+        public IEnumerable<IFeature> Features => _features.Values;
 
         /// <summary>
         ///     Allows to find feature by type
@@ -32,7 +32,7 @@ namespace OwnID.Web.Configuration
         ///     Return the feature if it exists in <see cref="Features" />. If there is no feature with
         ///     <typeparamref name="TFeature" /> type returns <c>null</c>
         /// </returns>
-        public TFeature FindFeature<TFeature>() where TFeature : class, IFeatureConfiguration
+        public TFeature FindFeature<TFeature>() where TFeature : class, IFeature
         {
             return _features.TryGetValue(typeof(TFeature), out var feature) ? (TFeature) feature : null;
         }
@@ -43,7 +43,7 @@ namespace OwnID.Web.Configuration
         /// <typeparam name="TFeature">type of feature to check</typeparam>
         /// <returns>true if feature with <typeparamref name="TFeature" /> has been added, otherwise false</returns>
         public bool HasFeature<TFeature>()
-            where TFeature : class, IFeatureConfiguration
+            where TFeature : class, IFeature
         {
             return _features.ContainsKey(typeof(TFeature));
         }
@@ -52,10 +52,10 @@ namespace OwnID.Web.Configuration
         ///     Tries to set (adds or updates) feature with <typeparamref name="TFeature" />
         /// </summary>
         /// <param name="feature"><typeparamref name="TFeature" /> instance</param>
-        /// <typeparam name="TFeature"><see cref="IFeatureConfiguration" /> implementation</typeparam>
+        /// <typeparam name="TFeature"><see cref="IFeature" /> implementation</typeparam>
         /// <returns>New instance of <see cref="OwnIdConfiguration" /> with <typeparamref name="TFeature" /> set</returns>
         public OwnIdConfiguration WithFeature<TFeature>([NotNull] TFeature feature)
-            where TFeature : class, IFeatureConfiguration
+            where TFeature : class, IFeature
         {
             var extensions = Features.ToDictionary(p => p.GetType(), p => p);
             extensions[typeof(TFeature)] = feature;

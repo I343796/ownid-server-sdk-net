@@ -9,6 +9,7 @@ using OwnID.Extensibility.Flow.Contracts.Jwt;
 using OwnID.Extensibility.Flow.Contracts.Link;
 using OwnID.Extensibility.Json;
 using OwnID.Web.Gigya.ApiClient;
+using OwnID.Web.Gigya.Configuration;
 using OwnID.Web.Gigya.Contracts;
 using OwnID.Web.Gigya.Contracts.Accounts;
 
@@ -18,11 +19,11 @@ namespace OwnID.Web.Gigya
         where TProfile : class, IGigyaUserProfile
     {
         private const string ApiKeyPayloadKey = "apiKey";
-        private readonly GigyaConfiguration _configuration;
+        private readonly IGigyaConfiguration _configuration;
         private readonly IOwnIdCoreConfiguration _ownIdConfiguration;
         private readonly GigyaRestApiClient<TProfile> _restApiClient;
 
-        public GigyaAccountLinkHandler(GigyaRestApiClient<TProfile> restApiClient, GigyaConfiguration configuration,
+        public GigyaAccountLinkHandler(GigyaRestApiClient<TProfile> restApiClient, IGigyaConfiguration configuration,
             IOwnIdCoreConfiguration ownIdConfiguration)
         {
             _restApiClient = restApiClient;

@@ -22,6 +22,8 @@ namespace OwnID.Flow.Adapters
         Task<bool> IsUserExistsAsync(string publicKey);
 
         Task<bool> IsFido2UserExistsAsync(string fido2CredentialId);
+        
+        Task<AuthResult<object>> RegisterPartialAsync(string did, OwnIdConnection ownIdConnection);
 
         Task<AuthResult<object>> OnSuccessLoginAsync(string did, string publicKey);
 

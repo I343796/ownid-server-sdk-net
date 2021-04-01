@@ -13,8 +13,7 @@ namespace OwnID.Web.Middlewares
     {
         private readonly IFlowRunner _flowRunner;
 
-        public InternalConnectionRecoveryMiddleware(RequestDelegate next,
-            ILogger<InternalConnectionRecoveryMiddleware> logger, IFlowRunner flowRunner) : base(next, logger)
+        public InternalConnectionRecoveryMiddleware(ILogger<InternalConnectionRecoveryMiddleware> logger, IFlowRunner flowRunner, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

@@ -14,7 +14,7 @@ namespace OwnID.Web.Middlewares.Fido2
     {
         private readonly IFlowRunner _flowRunner;
 
-        public Fido2AuthMiddleware(RequestDelegate next, IFlowRunner flowRunner, ILogger<Fido2AuthMiddleware> logger) :
+        public Fido2AuthMiddleware(IFlowRunner flowRunner, ILogger<Fido2AuthMiddleware> logger, RequestDelegate next = null) :
             base(next, logger)
         {
             _flowRunner = flowRunner;

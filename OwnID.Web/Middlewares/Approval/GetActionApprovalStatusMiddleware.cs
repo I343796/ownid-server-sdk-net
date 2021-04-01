@@ -13,8 +13,8 @@ namespace OwnID.Web.Middlewares.Approval
     {
         private readonly IFlowRunner _flowRunner;
 
-        public GetActionApprovalStatusMiddleware(RequestDelegate next, IFlowRunner flowRunner,
-            ILogger<GetActionApprovalStatusMiddleware> logger) : base(next, logger)
+        public GetActionApprovalStatusMiddleware(IFlowRunner flowRunner,
+            ILogger<GetActionApprovalStatusMiddleware> logger, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

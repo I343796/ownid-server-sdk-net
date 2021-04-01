@@ -14,7 +14,7 @@ namespace OwnID.Web.Resources {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class OwnIdSdkDefault {
+    public class OwnIdSdkDefault {
         
         private static System.Resources.ResourceManager resourceMan;
         

@@ -14,7 +14,7 @@ using OwnID.Services;
 
 namespace OwnID.Web.Middlewares
 {
-    public class MetricsMiddleware
+    public class MetricsMiddleware : IOwnIDMiddleware
     {
         private static readonly Regex ContextRegex = new(@"ownid\/(?<context>[^\/]*)\/.*", RegexOptions.Compiled);
         private readonly ICacheItemRepository _cacheItemRepository;
@@ -23,8 +23,8 @@ namespace OwnID.Web.Middlewares
 
         private readonly RequestDelegate _next;
 
-        public MetricsMiddleware(RequestDelegate next, ICacheItemRepository cacheItemRepository,
-            IEventsMetricsService eventsMetricsService, ILogger<MetricsMiddleware> logger)
+        public MetricsMiddleware(ICacheItemRepository cacheItemRepository,
+            IEventsMetricsService eventsMetricsService, ILogger<MetricsMiddleware> logger, RequestDelegate next = null)
         {
             _next = next;
             _cacheItemRepository = cacheItemRepository;

@@ -4,7 +4,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using AutoFixture;
 using Fido2NetLib;
-using Fido2NetLib.Objects;
 using Moq;
 using OwnID.Commands.Fido2;
 using OwnID.Extensibility.Cache;

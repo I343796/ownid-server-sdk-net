@@ -5,3 +5,6 @@ resources:
   - ../base
 
 namespace: prod
+
+patchesStrategicMerge:
+- replica-and-rollout-strategy.yaml

@@ -15,7 +15,7 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Test
-        run: dotnet test /p:CollectCoverage=true /p:Threshold=18 /p:ThresholdStat=total
+        run: dotnet test /p:CollectCoverage=true /p:Threshold=17 /p:ThresholdStat=total
 
       - name: Build
         run: docker build -f gigya-server.Dockerfile -t ownid-server-gigya:latest . --network=host

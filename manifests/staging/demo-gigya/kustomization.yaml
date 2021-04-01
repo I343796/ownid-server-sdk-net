@@ -5,10 +5,10 @@ kind: Kustomization
 resources:
 - ../base
 
-nameSuffix: -multilevel2
+nameSuffix: -demo-gigya
 
 commonLabels:
-  appId: multilevel2
+  appId: demo-gigya
 
 patchesStrategicMerge:
 - container.yaml

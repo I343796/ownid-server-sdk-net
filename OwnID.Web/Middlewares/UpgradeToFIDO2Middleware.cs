@@ -15,8 +15,8 @@ namespace OwnID.Web.Middlewares
         public const string NewAuthTypeRouteName = "authType";
         private readonly IFlowRunner _flowRunner;
 
-        public UpgradeToFIDO2Middleware(RequestDelegate next, ILogger<CheckUserExistenceMiddleware> logger,
-            IFlowRunner flowRunner) : base(next, logger)
+        public UpgradeToFIDO2Middleware(ILogger<UpgradeToFIDO2Middleware> logger,
+            IFlowRunner flowRunner, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

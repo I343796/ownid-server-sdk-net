@@ -15,8 +15,8 @@ namespace OwnID.Web.Middlewares
     {
         private readonly IFlowRunner _flowRunner;
 
-        public AcceptStartFlowMiddleware(RequestDelegate next, ILogger<AcceptStartFlowMiddleware> logger,
-            IFlowRunner flowRunner) : base(next, logger)
+        public AcceptStartFlowMiddleware(ILogger<AcceptStartFlowMiddleware> logger,
+            IFlowRunner flowRunner, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

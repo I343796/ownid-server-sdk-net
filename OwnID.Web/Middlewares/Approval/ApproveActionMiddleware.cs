@@ -13,8 +13,8 @@ namespace OwnID.Web.Middlewares.Approval
     {
         private readonly ApproveActionCommand _approveActionCommand;
 
-        public ApproveActionMiddleware(RequestDelegate next, ApproveActionCommand approveActionCommand,
-            ILogger<ApproveActionMiddleware> logger) : base(next, logger)
+        public ApproveActionMiddleware(ApproveActionCommand approveActionCommand,
+            ILogger<ApproveActionMiddleware> logger, RequestDelegate next = null) : base(next, logger)
         {
             _approveActionCommand = approveActionCommand;
         }

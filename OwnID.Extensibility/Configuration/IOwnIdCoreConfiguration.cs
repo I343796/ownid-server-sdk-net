@@ -159,11 +159,15 @@ namespace OwnID.Extensibility.Configuration
         /// <summary>
         ///     FIDO2 configuration
         /// </summary>
-        public IFido2Configuration Fido2 { get; }
+        public IFido2Configuration Fido2 { get; set; }
 
         /// <summary>
         ///     Log level
         /// </summary>
         public LogLevel LogLevel { get; set; }
+        
+        //TODO: rework
+        
+        public bool LoginOnlyEnabled { get; set; }
     }
 }

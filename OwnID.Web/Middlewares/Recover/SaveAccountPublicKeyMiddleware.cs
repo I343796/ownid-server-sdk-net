@@ -14,8 +14,8 @@ namespace OwnID.Web.Middlewares.Recover
     {
         private readonly IFlowRunner _flowRunner;
 
-        public SaveAccountPublicKeyMiddleware(RequestDelegate next, IFlowRunner flowRunner,
-            ILogger<SaveAccountPublicKeyMiddleware> logger) : base(next, logger)
+        public SaveAccountPublicKeyMiddleware(IFlowRunner flowRunner,
+            ILogger<SaveAccountPublicKeyMiddleware> logger, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

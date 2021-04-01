@@ -9,8 +9,8 @@ namespace OwnID.Web.Middlewares.MagicLink
     {
         private readonly SendMagicLinkCommand _sendMagicLinkCommand;
 
-        public SendMagicLinkMiddleware(RequestDelegate next, ILogger<SendMagicLinkMiddleware> logger,
-            SendMagicLinkCommand sendMagicLinkCommand) : base(next, logger)
+        public SendMagicLinkMiddleware(ILogger<SendMagicLinkMiddleware> logger,
+            SendMagicLinkCommand sendMagicLinkCommand, RequestDelegate next = null) : base(next, logger)
         {
             _sendMagicLinkCommand = sendMagicLinkCommand;
         }

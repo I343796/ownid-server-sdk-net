@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-gigya
+  name: single-server
 spec:
   template:
     spec:
@@ -9,7 +9,7 @@ spec:
         - name: server-gigya
           env:
             - name: OWNID__CALLBACK_URL
-              value: https://server.demo.staging.ownid.com
+              value: https://gigya.single.demo.staging.ownid.com
             - name: OWNID__DID
               value: did:ownid:demo_staging_151850889514
             - name: OWNID__NAME
@@ -23,4 +23,4 @@ spec:
             - name: OWNID__MAGIC_LINK__ENABLED
               value: 'true'
             - name: OWNID__MAGIC_LINK__REDIRECT_URL
-              value: https://demo.staging.ownid.com/login
+              value: https://gigya.single.demo.staging.ownid.com/login

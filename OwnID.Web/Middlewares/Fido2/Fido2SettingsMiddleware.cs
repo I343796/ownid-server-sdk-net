@@ -12,8 +12,8 @@ namespace OwnID.Web.Middlewares.Fido2
     {
         private readonly GetFido2SettingsCommand _getFido2SettingsCommand;
 
-        public Fido2SettingsMiddleware(RequestDelegate next, ILogger<Fido2SettingsMiddleware> logger,
-            GetFido2SettingsCommand getFido2SettingsCommand) : base(next, logger)
+        public Fido2SettingsMiddleware(ILogger<Fido2SettingsMiddleware> logger,
+            GetFido2SettingsCommand getFido2SettingsCommand, RequestDelegate next = null) : base(next, logger)
         {
             _getFido2SettingsCommand = getFido2SettingsCommand;
         }

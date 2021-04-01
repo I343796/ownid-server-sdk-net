@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OwnID.Cryptography;
 using OwnID.Extensibility.Cache;
+using OwnID.Extensibility.Configuration;
 using OwnID.Extensibility.Flow;
 using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Services;
@@ -17,16 +18,18 @@ namespace OwnID.Commands
     {
         private readonly ICacheItemRepository _cacheItemRepository;
         private readonly IJwtService _jwtService;
+        private readonly IOwnIdCoreConfiguration _configuration;
         private readonly ILocalizationService _localizationService;
         private readonly IUserHandlerAdapter _userHandlerAdapter;
 
         public GetStatusCommand(IUserHandlerAdapter userHandlerAdapter, ICacheItemRepository cacheItemRepository,
-            ILocalizationService localizationService, IJwtService jwtService)
+            ILocalizationService localizationService, IJwtService jwtService, IOwnIdCoreConfiguration configuration)
         {
             _userHandlerAdapter = userHandlerAdapter;
             _cacheItemRepository = cacheItemRepository;
             _localizationService = localizationService;
             _jwtService = jwtService;
+            _configuration = configuration;
         }
 
         public async Task<List<GetStatusResponse>> ExecuteAsync(List<GetStatusRequest> request)
@@ -128,6 +131,10 @@ namespace OwnID.Commands
                         result.Payload = new AuthResult<object>(errorMessage);
                         return result;
                     }
+                    case ChallengeType.Register when _configuration.LoginOnlyEnabled:
+                        result.Payload =
+                            await _userHandlerAdapter.RegisterPartialAsync(cacheItem.DID, cacheItem.GetConnection());
+                        break;
                     case ChallengeType.Register
                         when string.IsNullOrWhiteSpace(cacheItem.Fido2CredentialId):
                     {

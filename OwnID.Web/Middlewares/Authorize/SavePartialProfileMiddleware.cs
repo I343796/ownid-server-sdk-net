@@ -15,8 +15,8 @@ namespace OwnID.Web.Middlewares.Authorize
     {
         private readonly IFlowRunner _flowRunner;
 
-        public SavePartialProfileMiddleware(RequestDelegate next, IFlowRunner flowRunner,
-            ILogger<SavePartialProfileMiddleware> logger) : base(next, logger)
+        public SavePartialProfileMiddleware(IFlowRunner flowRunner,
+            ILogger<SavePartialProfileMiddleware> logger, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

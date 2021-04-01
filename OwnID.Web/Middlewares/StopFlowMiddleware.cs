@@ -10,7 +10,7 @@ namespace OwnID.Web.Middlewares
     {
         private readonly IFlowRunner _flowRunner;
 
-        public StopFlowMiddleware(RequestDelegate next, ILogger<StopFlowMiddleware> logger, IFlowRunner flowRunner) :
+        public StopFlowMiddleware(ILogger<StopFlowMiddleware> logger, IFlowRunner flowRunner, RequestDelegate next = null) :
             base(next, logger)
         {
             _flowRunner = flowRunner;

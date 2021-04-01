@@ -216,5 +216,23 @@ namespace OwnID.Extensibility.Cache
 
             return AuthCookieType == CookieType.Passcode? "Passcode" : "Basic";
         }
+
+        public OwnIdConnection GetConnection()
+        {
+            return new()
+            {
+                Fido2CredentialId = Fido2CredentialId,
+                Fido2SignatureCounter = Fido2SignatureCounter?.ToString(),
+                PublicKey = PublicKey,
+                RecoveryToken = RecoveryToken,
+                RecoveryData = RecoveryData,
+                AuthType = AuthCookieType switch
+                {
+                    CookieType.Fido2 => ConnectionAuthType.Fido2,
+                    CookieType.Passcode => ConnectionAuthType.Passcode,
+                    _ => ConnectionAuthType.Basic
+                }
+            };
+        }
     }
 }

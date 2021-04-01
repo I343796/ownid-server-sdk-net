@@ -14,8 +14,8 @@ namespace OwnID.Web.Middlewares.Link
     {
         private readonly IFlowRunner _flowRunner;
 
-        public SaveAccountLinkMiddleware(RequestDelegate next, IFlowRunner flowRunner,
-            ILogger<SaveAccountLinkMiddleware> logger) : base(next, logger)
+        public SaveAccountLinkMiddleware(IFlowRunner flowRunner,
+            ILogger<SaveAccountLinkMiddleware> logger, RequestDelegate next = null) : base(next, logger)
         {
             _flowRunner = flowRunner;
         }

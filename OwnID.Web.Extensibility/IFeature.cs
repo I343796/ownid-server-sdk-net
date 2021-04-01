@@ -6,7 +6,7 @@ namespace OwnID.Web.Extensibility
     /// <summary>
     ///     Describes extensibility unit for OwnId Sdk
     /// </summary>
-    public interface IFeatureConfiguration
+    public interface IFeature
     {
         /// <summary>
         ///     Will be called after successful <see cref="Validate" />
@@ -18,7 +18,7 @@ namespace OwnID.Web.Extensibility
         ///     Well be called before <see cref="Validate" /> to set default values
         /// </summary>
         /// <returns></returns>
-        IFeatureConfiguration FillEmptyWithOptional();
+        IFeature FillEmptyWithOptional();
 
         /// <summary>
         ///     Validates all needed feature parameters and settings

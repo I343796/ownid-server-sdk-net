@@ -20,7 +20,7 @@ namespace OwnID.Web.Configuration
     public class OwnIdConfigurationBuilder : IExtendableConfigurationBuilder
     {
         public OwnIdConfigurationBuilder(IServiceCollection services) : this(
-            new OwnIdConfiguration(new Dictionary<Type, IFeatureConfiguration>()))
+            new OwnIdConfiguration(new Dictionary<Type, IFeature>()))
         {
             Services = services;
             AddOrUpdateFeature(new CoreFeature().FillEmptyWithOptional());
@@ -75,10 +75,10 @@ namespace OwnID.Web.Configuration
         /// <summary>
         ///     Allows to add features for further extensibility
         /// </summary>
-        /// <param name="feature"><see cref="IFeatureConfiguration" /> implementation</param>
+        /// <param name="feature"><see cref="IFeature" /> implementation</param>
         /// <typeparam name="TFeature">Feature to be added</typeparam>
         public void AddOrUpdateFeature<TFeature>([NotNull] TFeature feature)
-            where TFeature : class, IFeatureConfiguration
+            where TFeature : class, IFeature
         {
             Configuration = Configuration.WithFeature(feature);
         }
@@ -153,11 +153,21 @@ namespace OwnID.Web.Configuration
         }
 
         /// <summary>
+        ///     Defines usage of any <see cref="ICacheStore" /> implementation to store technical authorization data
+        /// </summary>
+        /// <param name="cacheStoreFactory">cache store factory</param>
+        /// <param name="serviceLifetime">cache store lifetime</param>
+        public void UseCacheStore<TStore>(ServiceLifetime serviceLifetime, Func<IServiceProvider, TStore> cacheStoreFactory) where TStore : class, ICacheStore
+        {
+            WithFeature<CacheStoreFeature>(x => x.UseStore(serviceLifetime, cacheStoreFactory));
+        }
+
+        /// <summary>
         ///     Defines usage of In Memory Cache Store
         /// </summary>
         public void UseInMemoryCacheStore()
         {
-            WithFeature<CacheStoreFeature>(x => x.UseStoreInMemoryStore());
+            WithFeature<CacheStoreFeature>(x => x.UseInMemoryStore());
         }
 
         /// <summary>
@@ -191,7 +201,7 @@ namespace OwnID.Web.Configuration
         }
 
         private OwnIdConfigurationBuilder WithFeature<TFeature>(Func<TFeature, TFeature> setupFunc)
-            where TFeature : class, IFeatureConfiguration, new()
+            where TFeature : class, IFeature, new()
         {
             AddOrUpdateFeature(setupFunc(Configuration.FindFeature<TFeature>() ?? new TFeature()));
             return this;
