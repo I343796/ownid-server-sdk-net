@@ -6,6 +6,7 @@ on:
       - master
       - develop
       - 'release/**'
+      - 'bohdan/infrastructure'
 
 jobs:
   deploy:
@@ -51,7 +52,7 @@ jobs:
       run: sudo apt-get install libxml2-utils
 
     - name: Deploy DEV
-      if: github.ref == 'refs/heads/develop'
+      if: github.ref == 'refs/heads/bohdan/infrastructure'
       run: bash scripts/deploy/not-prod.sh dev
 
     - name: Deploy STAGING
