@@ -142,10 +142,10 @@ namespace OwnID.Extensibility.Flow.Abstractions
         /// <summary>
         ///     Upgrades connection
         /// </summary>
-        /// <param name="did"></param>
+        /// <param name="publicKey"></param>
         /// <param name="newConnection"></param>
         /// <returns></returns>
-        Task UpgradeConnectionAsync(string did, OwnIdConnection newConnection);
+        Task UpgradeConnectionAsync(string publicKey, OwnIdConnection newConnection);
 
         /// <summary>
         ///     Gets user name

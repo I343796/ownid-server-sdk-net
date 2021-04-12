@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-gigya
+  name: single-server
 spec:
   template:
     spec:
       containers:
-        - name: server-gigya
+        - name: single-server
           env:
             - name: OWNID__CALLBACK_URL
               value: https://nestle-hipster.ownid.com

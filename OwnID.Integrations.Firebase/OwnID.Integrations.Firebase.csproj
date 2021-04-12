@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\OwnID.Extensibility\OwnID.Extensibility.csproj" />
+      <ProjectReference Include="..\OwnID.Web.Extensibility\OwnID.Web.Extensibility.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FirebaseAdmin" Version="2.0.0" />
+      <PackageReference Include="Google.Cloud.Firestore" Version="2.3.0" />
+    </ItemGroup>
+
+</Project>

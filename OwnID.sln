@@ -4,9 +4,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID", "OwnID\OwnID.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Web", "OwnID.Web\OwnID.Web.csproj", "{B8386AEE-2303-4617-AA49-3F425B74EEA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Server.Gigya", "OwnID.Server.Gigya\OwnID.Server.Gigya.csproj", "{CE62B055-DFFE-4B54-B757-6E87226A7638}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Server", "OwnID.Server\OwnID.Server.csproj", "{CE62B055-DFFE-4B54-B757-6E87226A7638}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Web.Gigya", "OwnID.Web.Gigya\OwnID.Web.Gigya.csproj", "{54FE3E8D-B56C-4E33-885C-040E4DAB5E7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Integrations.Gigya", "OwnID.Integrations.Gigya\OwnID.Integrations.Gigya.csproj", "{54FE3E8D-B56C-4E33-885C-040E4DAB5E7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Web.Extensibility", "OwnID.Web.Extensibility\OwnID.Web.Extensibility.csproj", "{31190FAF-695C-4BEA-AC63-0ECA2553A763}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Server.WebApp", "OwnID.Server.WebApp\OwnID.Server.WebApp.csproj", "{EA04C4E8-6765-4404-BB55-1A32AB4A9E8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Tests", "OwnID.Tests\OwnID.Tests.csproj", "{A349E500-8886-42DB-ADAD-0C35C2BB4233}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OwnID.Integrations.Firebase", "OwnID.Integrations.Firebase\OwnID.Integrations.Firebase.csproj", "{00D6FDF8-3419-44AE-B4DC-EF41248B317A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,5 +62,9 @@ Global
 		{A349E500-8886-42DB-ADAD-0C35C2BB4233}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A349E500-8886-42DB-ADAD-0C35C2BB4233}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A349E500-8886-42DB-ADAD-0C35C2BB4233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00D6FDF8-3419-44AE-B4DC-EF41248B317A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00D6FDF8-3419-44AE-B4DC-EF41248B317A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00D6FDF8-3419-44AE-B4DC-EF41248B317A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00D6FDF8-3419-44AE-B4DC-EF41248B317A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
