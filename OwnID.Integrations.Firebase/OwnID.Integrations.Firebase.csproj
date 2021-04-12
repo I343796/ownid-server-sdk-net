@@ -11,6 +11,8 @@
 
     <ItemGroup>
       <PackageReference Include="FirebaseAdmin" Version="2.0.0" />
+      <PackageReference Include="Google.Cloud.Diagnostics.AspNetCore3" Version="4.2.0" />
+      <PackageReference Include="Grpc.Core" Version="2.36.4" />
       <PackageReference Include="Google.Cloud.Firestore" Version="2.3.0" />
     </ItemGroup>
 

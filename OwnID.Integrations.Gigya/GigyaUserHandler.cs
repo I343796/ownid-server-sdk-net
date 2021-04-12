@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -57,21 +56,24 @@ namespace OwnID.Integrations.Gigya
         {
             var searchResult = await _restApiClient.SearchAsync<UidContainer>(GigyaFields.ConnectionFido2CredentialId,
                 fido2CredentialId);
-            
+
             if (!searchResult.IsSuccess)
             {
                 if (searchResult.ErrorCode != 0)
                     throw new Exception(searchResult.GetFailureMessage());
-                
+
                 return new AuthResult<object>("Can not find user in Gigya with provided fido2 user id");
             }
 
-            var connectionToUpdate = searchResult.First.Data.OwnId.Connections.First(x => x.Fido2CredentialId == fido2CredentialId);
+            var connectionToUpdate =
+                searchResult.First.Data.OwnId.Connections.First(x => x.Fido2CredentialId == fido2CredentialId);
 
             // Update signature counter
             connectionToUpdate.Fido2SignatureCounter = fido2SignCounter.ToString();
 
-            var setAccountResponse = await _restApiClient.SetAccountInfoAsync(searchResult.First.UID, (TProfile) null, searchResult.First.Data);
+            var setAccountResponse =
+                await _restApiClient.SetAccountInfoAsync(searchResult.First.UID, (TProfile) null,
+                    searchResult.First.Data);
             if (setAccountResponse.ErrorCode > 0)
                 throw new Exception(
                     $"did: {searchResult.First.UID} " +
@@ -106,12 +108,12 @@ namespace OwnID.Integrations.Gigya
                 await _restApiClient.SearchAsync<AccountInfoResponse<TProfile>>(GigyaFields.UID, did,
                     GigyaFields.Profile);
 
-            if (getAccountMessage.IsSuccess) 
+            if (getAccountMessage.IsSuccess)
                 return getAccountMessage.First.Profile?.FirstName;
-            
+
             if (getAccountMessage.ErrorCode != 0)
                 throw new Exception(getAccountMessage.GetFailureMessage());
-                
+
             throw new Exception($"Can't find user with did = {did}");
         }
 
