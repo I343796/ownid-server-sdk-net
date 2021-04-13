@@ -31,7 +31,7 @@ namespace OwnID.Integrations.Firebase.Handlers
             var did = decodedToken.Uid;
             
             var connections = await _firebaseContext.Db.Collection(Constants.CollectionName)
-                .WhereEqualTo("userId", did).GetSnapshotAsync();
+                .WhereEqualTo(Constants.UserIdFieldName, did).GetSnapshotAsync();
 
             return new LinkState(did, (uint) connections.Count);
         }
@@ -50,7 +50,8 @@ namespace OwnID.Integrations.Firebase.Handlers
                 recoveryEncData = connection.RecoveryData,
                 fido2CredentialId = connection.Fido2CredentialId,
                 fido2SignatureCounter = connection.Fido2SignatureCounter,
-                userId = did
+                userId = did,
+                authType = connection.AuthType
             });
         }
     }

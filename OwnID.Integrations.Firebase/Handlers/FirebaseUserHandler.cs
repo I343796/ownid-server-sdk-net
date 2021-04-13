@@ -73,12 +73,9 @@ namespace OwnID.Integrations.Firebase.Handlers
             if (!connection.Exists)
                 return IdentitiesCheckResult.UserNotFound;
 
-            var connectionDto = connection.ConvertTo<Connection>();
-
-            if (connectionDto.PublicKey != publicKey)
-                return IdentitiesCheckResult.WrongPublicKey;
-
-            return IdentitiesCheckResult.UserExists;
+            return connection.GetValue<string>(Constants.PublicKeyFieldName) != publicKey
+                ? IdentitiesCheckResult.WrongPublicKey
+                : IdentitiesCheckResult.UserExists;
         }
 
         public async Task<bool> IsUserExists(string publicKey)
@@ -108,14 +105,13 @@ namespace OwnID.Integrations.Firebase.Handlers
             if (!connection.Exists)
                 throw new Exception("User was not found");
 
-            var connectionDto = connection.ConvertTo<Connection>();
 
             return new Fido2Info
             {
-                CredentialId = connectionDto.Fido2CredentialId,
-                PublicKey = connectionDto.PublicKey,
-                SignatureCounter = uint.Parse(connectionDto.Fido2SignatureCounter),
-                UserId = connectionDto.UserId
+                CredentialId = connection.GetValue<string>(Constants.Fido2CredentialIdFieldName),
+                PublicKey = connection.GetValue<string>(Constants.PublicKeyFieldName),
+                SignatureCounter = uint.Parse(connection.GetValue<string>(Constants.Fido2SignatureCounterFieldName)),
+                UserId = connection.GetValue<string>(Constants.UserIdFieldName)
             };
         }
 
@@ -126,17 +122,17 @@ namespace OwnID.Integrations.Firebase.Handlers
                 throw new ArgumentNullException(nameof(recoveryToken));
 
             var connections = await _firebaseContext.Db.Collection(Constants.CollectionName)
-                .WhereEqualTo("recoveryId", recoveryToken).GetSnapshotAsync();
+                .WhereEqualTo(Constants.RecoveryIdFieldName, recoveryToken).GetSnapshotAsync();
 
             if (connections.Count == 0)
                 throw new Exception("User not found");
 
-            var connection = connections.First().ConvertTo<Connection>();
+            var connection = connections.First();
             return new ConnectionRecoveryResult<EmptyProfile>
             {
-                PublicKey = connection.PublicKey,
-                RecoveryData = connection.RecoveryData,
-                DID = connection.UserId
+                PublicKey = connection.GetValue<string>(Constants.PublicKeyFieldName),
+                RecoveryData = connection.GetValue<string>(Constants.RecoveryDataFieldName),
+                DID = connection.GetValue<string>(Constants.UserIdFieldName)
             };
         }
 
@@ -150,12 +146,12 @@ namespace OwnID.Integrations.Firebase.Handlers
             var connection = await _firebaseContext.Db.Collection(Constants.CollectionName)
                 .Document(publicKey.ToSha256().ReplaceSpecPathSymbols())
                 .GetSnapshotAsync();
-            
+
             if (!connection.Exists)
                 throw new Exception("User was not found");
 
-            var userId = connection.GetValue<string>("userId");
-            
+            var userId = connection.GetValue<string>(Constants.UserIdFieldName);
+
             var userSettings = await _firebaseContext.Db.Collection(Constants.CollectionName)
                 .Document(userId)
                 .GetSnapshotAsync();
@@ -163,8 +159,8 @@ namespace OwnID.Integrations.Firebase.Handlers
             var result = new UserSettings();
 
             if (userSettings.Exists)
-                result.EnforceTFA = userSettings.GetValue<bool>("enforceTfa");
-            
+                result.EnforceTFA = userSettings.GetValue<bool>(Constants.EnforceTfaFieldName);
+
             return result;
         }
 
@@ -184,7 +180,7 @@ namespace OwnID.Integrations.Firebase.Handlers
                     ? newConnection.PublicKey.ToSha256()
                     : newConnection.Fido2CredentialId;
 
-                var newDbConnection = _firebaseContext.Db.Collection(Constants.CollectionName).Document(connectionId);
+                var newDbConnection = _firebaseContext.Db.Collection(Constants.CollectionName).Document(connectionId.ReplaceSpecPathSymbols());
                 transaction.Create(newDbConnection, new
                 {
                     pubKey = newConnection.PublicKey,
@@ -193,7 +189,8 @@ namespace OwnID.Integrations.Firebase.Handlers
                     recoveryEncData = newConnection.RecoveryData,
                     fido2CredentialId = newConnection.Fido2CredentialId,
                     fido2SignatureCounter = newConnection.Fido2SignatureCounter,
-                    userId = oldConnectionSnapshot.GetValue<string>("userId")
+                    userId = oldConnectionSnapshot.GetValue<string>(Constants.UserIdFieldName),
+                    authType = newConnection.AuthType
                 });
             });
         }
@@ -205,14 +202,14 @@ namespace OwnID.Integrations.Firebase.Handlers
 
         private async Task<AuthResult<object>> AuthorizeByConnection(string connectionId)
         {
-            var connection = await _firebaseContext.Db.Collection("ownid")
+            var connection = await _firebaseContext.Db.Collection(Constants.CollectionName)
                 .Document(connectionId.ReplaceSpecPathSymbols())
                 .GetSnapshotAsync();
 
             if (!connection.Exists)
                 return new AuthResult<object>("User was not found");
 
-            var customToken = await CreateCustomTokenAsync(connection.GetValue<string>("userId"));
+            var customToken = await CreateCustomTokenAsync(connection.GetValue<string>(Constants.UserIdFieldName));
 
             return new AuthResult<object>(new
             {
