@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace OwnID.Integrations.Firebase.Contracts
+namespace OwnID.Integrations.Firebase.Configuration
 {
     public interface IFirebaseConfiguration
     {

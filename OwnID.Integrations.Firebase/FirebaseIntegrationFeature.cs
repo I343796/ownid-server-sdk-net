@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OwnID.Extensibility.Configuration;
 using OwnID.Extensibility.Json;
-using OwnID.Integrations.Firebase.Contracts;
+using OwnID.Integrations.Firebase.Configuration;
 using OwnID.Web.Extensibility;
 
 namespace OwnID.Integrations.Firebase
@@ -16,6 +16,7 @@ namespace OwnID.Integrations.Firebase
     public class FirebaseIntegrationFeature : IFeature
     {
         private readonly IFirebaseConfiguration _configuration = new FirebaseConfiguration();
+        private readonly FirebaseConfigurationValidator _validator = new();
 
         public void ApplyServices(IServiceCollection services)
         {
@@ -28,7 +29,7 @@ namespace OwnID.Integrations.Firebase
                 var coreConfiguration = provider.GetRequiredService<IOwnIdCoreConfiguration>();
                 var client = new FirestoreClientBuilder {JsonCredentials = _configuration.CredentialsJson}.Build();
                 var firestoreDb = FirestoreDb.Create(projectId, client);
-                
+
                 var firebaseApp = FirebaseApp.GetInstance(coreConfiguration.DID) ??
                                   FirebaseApp.Create(new AppOptions
                                   {
@@ -49,13 +50,13 @@ namespace OwnID.Integrations.Firebase
 
         public IFeature FillEmptyWithOptional()
         {
+            _validator.FillEmptyWithOptional(_configuration);
             return this;
         }
 
         public void Validate()
         {
-            if (string.IsNullOrWhiteSpace(_configuration?.CredentialsJson))
-                throw new InvalidOperationException("Firebase configuration can not be null");
+            _validator.Validate(_configuration);
         }
 
         public FirebaseIntegrationFeature WithConfig(Action<IFirebaseConfiguration> configAction)

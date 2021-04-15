@@ -26,7 +26,7 @@ spec:
               value: https://firebase.single.demo.staging.ownid.com/login
             - name: OWNID__INTEGRATION
               value: firebase
-            - name: FIREBASE__CREDENTIAL_JSON
+            - name: FIREBASE__CREDENTIALS_JSON
               valueFrom:
                 secretKeyRef:
                   name: demo-secret
