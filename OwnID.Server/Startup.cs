@@ -91,7 +91,7 @@ namespace OwnID.Server
                 {
                     case "firebase":
                         var firebaseSection = Configuration.GetSection("firebase");
-                        builder.UseFirebase(firebaseSection["credential_json"]);
+                        builder.UseFirebase(firebaseSection["credentials_json"]);
                         break;
                     default:
                         var gigyaSection = Configuration.GetSection("gigya");
