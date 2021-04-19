@@ -147,16 +147,16 @@ namespace OwnID.Integrations.Firebase.Handlers
                 .Document(publicKey.ToSha256().ReplaceSpecPathSymbols())
                 .GetSnapshotAsync();
 
+            var result = new UserSettings();
+            
             if (!connection.Exists)
-                throw new Exception("User was not found");
+                return result;
 
             var userId = connection.GetValue<string>(Constants.UserIdFieldName);
 
             var userSettings = await _firebaseContext.Db.Collection(Constants.CollectionName)
                 .Document(userId)
                 .GetSnapshotAsync();
-
-            var result = new UserSettings();
 
             if (userSettings.Exists)
                 result.EnforceTFA = userSettings.GetValue<bool>(Constants.EnforceTfaFieldName);
@@ -173,7 +173,7 @@ namespace OwnID.Integrations.Firebase.Handlers
             if (!oldConnectionSnapshot.Exists)
                 throw new Exception("User not found");
 
-            await _firebaseContext.Db.RunTransactionAsync(async transaction =>
+            await _firebaseContext.Db.RunTransactionAsync(transaction =>
             {
                 transaction.Delete(oldConnectionQuery);
                 var connectionId = string.IsNullOrEmpty(newConnection.Fido2CredentialId)
@@ -192,6 +192,8 @@ namespace OwnID.Integrations.Firebase.Handlers
                     userId = oldConnectionSnapshot.GetValue<string>(Constants.UserIdFieldName),
                     authType = newConnection.AuthType
                 });
+                
+                return Task.CompletedTask;
             });
         }
 

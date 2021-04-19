@@ -9,6 +9,7 @@ namespace OwnID.Integrations.Firebase
         public static void UseFirebase(this IExtendableConfigurationBuilder builder, string credentialsJson)
         {
             var feature = new FirebaseIntegrationFeature();
+
             feature.WithConfig(configuration => { configuration.CredentialsJson = credentialsJson; });
 
             builder.AddOrUpdateFeature(feature);

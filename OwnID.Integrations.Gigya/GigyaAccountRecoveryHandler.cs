@@ -6,6 +6,7 @@ using OwnID.Extensibility.Flow.Abstractions;
 using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Flow.Contracts.AccountRecovery;
 using OwnID.Extensibility.Json;
+using OwnID.Extensibility.Providers;
 using OwnID.Integrations.Gigya.ApiClient;
 using OwnID.Integrations.Gigya.Contracts.AccountRecovery;
 using OwnID.Integrations.Gigya.Contracts.Accounts;
@@ -19,16 +20,18 @@ namespace OwnID.Integrations.Gigya
         where TProfile : class, IGigyaUserProfile
     {
         private readonly GigyaRestApiClient<TProfile> _apiClient;
+        private readonly IRandomPasswordProvider _randomPasswordProvider;
 
-        public GigyaAccountRecoveryHandler(GigyaRestApiClient<TProfile> apiClient)
+        public GigyaAccountRecoveryHandler(GigyaRestApiClient<TProfile> apiClient, IRandomPasswordProvider randomPasswordProvider)
         {
             _apiClient = apiClient;
+            _randomPasswordProvider = randomPasswordProvider;
         }
 
         public async Task<AccountRecoveryResult> RecoverAsync(string accountRecoveryPayload)
         {
             var payload = OwnIdSerializer.Deserialize<GigyaAccountRecoveryPayload>(accountRecoveryPayload);
-            var newPassword = PasswordGenerator.Generate();
+            var newPassword = _randomPasswordProvider.Generate();
 
             var resetPasswordResponse = await _apiClient.ResetPasswordAsync(payload.ResetToken, newPassword);
 

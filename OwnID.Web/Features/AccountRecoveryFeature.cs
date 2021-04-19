@@ -2,6 +2,8 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OwnID.Extensibility.Flow.Abstractions;
+using OwnID.Extensibility.Providers;
+using OwnID.Providers;
 using OwnID.Web.Extensibility;
 
 namespace OwnID.Web.Features
@@ -13,6 +15,7 @@ namespace OwnID.Web.Features
         public void ApplyServices(IServiceCollection services)
         {
             _applyServicesAction(services);
+            services.TryAddSingleton<IRandomPasswordProvider, RandomPasswordProvider>();
         }
 
         public IFeature FillEmptyWithOptional()

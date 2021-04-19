@@ -20,6 +20,7 @@ namespace OwnID.Integrations.Firebase
 
         public void ApplyServices(IServiceCollection services)
         {
+            services.AddHttpClient();
             services.TryAddSingleton(_configuration);
             services.TryAddSingleton<IFirebaseContext>(provider =>
             {
@@ -36,7 +37,7 @@ namespace OwnID.Integrations.Firebase
                                       Credential = GoogleCredential.FromJson(_configuration.CredentialsJson),
                                       ProjectId = projectId
                                   }, coreConfiguration.DID);
-
+                
                 var firebaseAuth = FirebaseAuth.GetAuth(firebaseApp);
 
                 return new FirebaseContext
