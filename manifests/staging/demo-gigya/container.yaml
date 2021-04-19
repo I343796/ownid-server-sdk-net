@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-        - name: server-gigya
+        - name: single-server
           env:
             - name: OWNID__CALLBACK_URL
               value: https://gigya.single.demo.staging.ownid.com

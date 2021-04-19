@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: single-server
+spec:
+  template:
+    spec:
+      containers:
+        - name: single-server
+          env:
+            - name: OWNID__CALLBACK_URL
+              value: https://firebase.single.demo.dev.ownid.com
+            - name: OWNID__DID
+              value: did:ownid:demo_firebase_dev_151850889514
+            - name: OWNID__NAME
+              value: Firebase Noted (OwnID Demo)
+            - name: OWNID__DESCRIPTION
+              value: Firebase Noted (OwnID Demo)
+            - name: OWNID__FIDO2_PASSWORDLESS_PAGE_URL
+              value: https://passwordless.firebase.single.demo.dev.ownid.com
+            - name: OWNID__TOP_DOMAIN
+              value: demo.dev.ownid.com
+            - name: OWNID__MAGIC_LINK__ENABLED
+              value: 'true'
+            - name: OWNID__MAGIC_LINK__REDIRECT_URL
+              value: https://firebase.single.demo.dev.ownid.com/login
+            - name: OWNID__INTEGRATION
+              value: firebase
+            - name: FIREBASE__CREDENTIALS_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: demo-secret
+                  key: firebase-credential-json
+            - name: Metrics__Enable
+              value: 'true'
+            - name: Metrics__Namespace
+              value: 'OwnId Dev'
+            - name: AWS__Region
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: region
+            - name: AWS__AccessKeyId
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: access_key_id
+            - name: AWS__SecretAccessKey
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: secret_access_key

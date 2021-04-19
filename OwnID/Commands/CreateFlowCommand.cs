@@ -50,7 +50,7 @@ namespace OwnID.Commands
                     flowType = !request.IsPartial ? FlowType.Authorize : FlowType.PartialAuthorize;
                     break;
                 case ChallengeType.Link:
-                    var state = await GetLinkState(request.Payload.ToString());
+                    var state = await GetLinkState(request.Payload?.ToString());
                     if (state.ConnectedDevicesCount >= _configuration.MaximumNumberOfConnectedDevices)
                         return new GetChallengeLinkResponse(default, _urlProvider.GetWebAppConnectionsUrl().ToString(),
                             default, default, _magicLinkEnabled);

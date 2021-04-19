@@ -1,14 +1,14 @@
 #!/bin/bash
 
-PKG_VERSION=`xmllint --xpath "string(//Project/PropertyGroup/AssemblyVersion)" ./OwnID.Server.Gigya/OwnID.Server.Gigya.csproj`
-IMAGE_URI=$DOCKER_URL/prod/single-server/ownid-server-gigya:${PKG_VERSION-}
+PKG_VERSION=`xmllint --xpath "string(//Project/PropertyGroup/AssemblyVersion)" ./OwnID.Server/OwnID.Server.csproj`
+IMAGE_URI=$DOCKER_URL/prod/single-server/ownid-single-server:${PKG_VERSION-}
 
 echo Docker push to $IMAGE_URI
-docker tag ownid-server-gigya:latest $IMAGE_URI
+docker tag ownid-single-server:latest $IMAGE_URI
 docker push $IMAGE_URI
 
 echo Update IMAGE in base kustomization.yaml
-(cd manifests/base && kustomize edit set image server-gigya=$IMAGE_URI)
+(cd manifests/base && kustomize edit set image single-server=$IMAGE_URI)
 echo
 
 echo Adding K8S clusters...

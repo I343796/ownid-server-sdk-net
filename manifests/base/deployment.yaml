@@ -8,8 +8,8 @@ spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: server-gigya
-          image: server-gigya:latest
+        - name: single-server
+          image: single-server:latest
           ports:
             - containerPort: 5002
           env:

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: single-server
+spec:
+  template:
+    spec:
+      containers:
+        - name: single-server
+          env:
+            - name: OWNID__CALLBACK_URL
+              value: https://firebase.single.demo.staging.ownid.com
+            - name: OWNID__DID
+              value: did:ownid:demo_firebase_staging_151850889514
+            - name: OWNID__NAME
+              value: Firebase Noted (OwnID Demo)
+            - name: OWNID__DESCRIPTION
+              value: Firebase Noted (OwnID Demo)
+            - name: OWNID__FIDO2_PASSWORDLESS_PAGE_URL
+              value: https://passwordless.firebase.single.demo.staging.ownid.com
+            - name: OWNID__TOP_DOMAIN
+              value: demo.staging.ownid.com
+            - name: OWNID__MAGIC_LINK__ENABLED
+              value: 'true'
+            - name: OWNID__MAGIC_LINK__REDIRECT_URL
+              value: https://firebase.single.demo.staging.ownid.com/login
+            - name: OWNID__INTEGRATION
+              value: firebase
+            - name: FIREBASE__CREDENTIALS_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: demo-secret
+                  key: firebase-credential-json

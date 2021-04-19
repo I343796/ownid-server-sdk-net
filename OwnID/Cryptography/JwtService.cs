@@ -82,8 +82,16 @@ namespace OwnID.Cryptography
 
             foreach (var (key, value) in data) payload.Add(key, value);
 
-            var jwt = new JwtSecurityToken(
-                new JwtHeader(new SigningCredentials(rsaSecurityKey, SecurityAlgorithms.RsaSha256)), payload);
+
+            var signingCredentials = new SigningCredentials(rsaSecurityKey, SecurityAlgorithms.RsaSha256)
+            {
+                CryptoProviderFactory = new CryptoProviderFactory
+                {
+                    CacheSignatureProviders = false
+                }
+            };
+
+            var jwt = new JwtSecurityToken(new JwtHeader(signingCredentials), payload);
 
             return tokenHandler.WriteToken(jwt);
         }

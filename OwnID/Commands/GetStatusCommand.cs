@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OwnID.Cryptography;
 using OwnID.Extensibility.Cache;
 using OwnID.Extensibility.Configuration;
+using OwnID.Extensibility.Extensions;
 using OwnID.Extensibility.Flow;
 using OwnID.Extensibility.Flow.Contracts;
 using OwnID.Extensibility.Services;
@@ -183,16 +184,12 @@ namespace OwnID.Commands
 
         private object SetPartialRegisterResult(CacheItem cacheItem)
         {
-            using var sha256 = new SHA256Managed();
-            var hash = Convert.ToBase64String(
-                sha256.ComputeHash(Encoding.UTF8.GetBytes(cacheItem.PublicKey)));
-
             return new
             {
                 data = new
                 {
                     pubKey = cacheItem.PublicKey,
-                    keyHsh = hash,
+                    keyHsh = cacheItem.PublicKey.ToSha256(),
                     recoveryId = cacheItem.RecoveryToken,
                     recoveryEncData = cacheItem.RecoveryData
                 }
