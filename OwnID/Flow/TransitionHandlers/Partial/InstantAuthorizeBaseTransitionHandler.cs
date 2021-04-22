@@ -20,14 +20,12 @@ namespace OwnID.Flow.TransitionHandlers.Partial
 {
     public class InstantAuthorizeBaseTransitionHandler : BaseTransitionHandler<TransitionInput<JwtContainer>>
     {
+        private readonly ICacheItemRepository _cacheItemRepository;
+        private readonly IOwnIdCoreConfiguration _configuration;
         private readonly ICookieService _cookieService;
         private readonly IJwtService _jwtService;
-        private readonly IUserHandlerAdapter _userHandlerAdapter;
-        private readonly IOwnIdCoreConfiguration _configuration;
-        private readonly ICacheItemRepository _cacheItemRepository;
         private readonly SavePartialConnectionCommand _savePartialConnectionCommand;
-
-        public override StepType StepType => StepType.InstantAuthorize;
+        private readonly IUserHandlerAdapter _userHandlerAdapter;
 
         public InstantAuthorizeBaseTransitionHandler(IJwtComposer jwtComposer, StopFlowCommand stopFlowCommand,
             IUrlProvider urlProvider, SavePartialConnectionCommand savePartialConnectionCommand,
@@ -42,6 +40,8 @@ namespace OwnID.Flow.TransitionHandlers.Partial
             _configuration = configuration;
             _cacheItemRepository = cacheItemRepository;
         }
+
+        public override StepType StepType => StepType.InstantAuthorize;
 
 
         public override FrontendBehavior GetOwnReference(string context, ChallengeType challengeType)
@@ -69,14 +69,10 @@ namespace OwnID.Flow.TransitionHandlers.Partial
 
             // Check if user settings override global one
             var settings = await _userHandlerAdapter.GetUserSettingsAsync(userData.PublicKey);
-            if (
-                _configuration.TFAEnabled == false
-                && settings?.EnforceTFA == true
-                && userData.AuthType == ConnectionAuthType.Basic)
-            {
+            if (_configuration.TFAEnabled && (settings?.EnforceTFA ?? false)
+                                          && userData.AuthType == ConnectionAuthType.Basic)
                 return await SwitchConnectionAuthTypeAsync(relatedItem, input, userData.SupportsFido2,
                     userData.PublicKey);
-            }
 
             return await FinishAuthProcessAsync(userData, relatedItem, input);
         }
@@ -130,7 +126,7 @@ namespace OwnID.Flow.TransitionHandlers.Partial
 
             var composeInfo = new BaseJwtComposeInfo(input)
             {
-                Behavior = FrontendBehavior.CreateSuccessFinish(relatedItem.ChallengeType),
+                Behavior = FrontendBehavior.CreateSuccessFinish(relatedItem.ChallengeType)
             };
 
             var jwt = JwtComposer.GenerateFinalStepJwt(composeInfo);
