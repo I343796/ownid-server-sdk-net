@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using OwnID.Extensibility.Exceptions;
 using OwnID.Extensibility.Flow.Abstractions;
@@ -44,7 +43,7 @@ namespace OwnID.Integrations.Gigya
             };
         }
 
-        public async Task OnRecoverAsync(string did, OwnIdConnection connection)
+        public async Task ReplaceWithNewConnectionAsync(string did, OwnIdConnection connection)
         {
             var gigyaOwnIdConnection = new GigyaOwnIdConnection(connection);
 
@@ -53,19 +52,6 @@ namespace OwnID.Integrations.Gigya
 
             if (responseMessage.ErrorCode != 0)
                 throw new Exception($"Gigya.setAccountInfo error -> {responseMessage.GetFailureMessage()}");
-        }
-
-        public async Task RemoveConnectionsAsync(string publicKey)
-        {
-            var result = await _apiClient.SearchByPublicKey(publicKey);
-
-            if (string.IsNullOrEmpty(result?.UID))
-                return;
-
-            var connectionToRemove = result.Data.OwnId.Connections.Single(c => c.PublicKey == publicKey);
-            result.Data.OwnId.Connections.Remove(connectionToRemove);
-
-            await _apiClient.SetAccountInfoAsync<TProfile>(result.UID, data: result.Data);
         }
     }
 }

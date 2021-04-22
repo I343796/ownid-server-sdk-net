@@ -58,7 +58,7 @@ namespace OwnID.Integrations.Firebase.Handlers
             };
         }
 
-        public async Task OnRecoverAsync(string did, OwnIdConnection connection)
+        public async Task ReplaceWithNewConnectionAsync(string did, OwnIdConnection connection)
         {
             var connectionId = string.IsNullOrEmpty(connection.Fido2CredentialId)
                 ? connection.PublicKey.ToSha256()
@@ -66,16 +66,14 @@ namespace OwnID.Integrations.Firebase.Handlers
 
             var newDbConnection = _firebaseContext.Db.Collection(Constants.CollectionName)
                 .Document(connectionId.ReplaceSpecPathSymbols());
-            
-            var oldConnections = await _firebaseContext.Db.Collection(Constants.CollectionName).WhereEqualTo(Constants.UserIdFieldName, did).GetSnapshotAsync();
-            
+
+            var oldConnections = await _firebaseContext.Db.Collection(Constants.CollectionName)
+                .WhereEqualTo(Constants.UserIdFieldName, did).GetSnapshotAsync();
+
             await _firebaseContext.Db.RunTransactionAsync(transaction =>
             {
-                foreach (var oldConnection in oldConnections)
-                {
-                    transaction.Delete(oldConnection.Reference);
-                }
-                
+                foreach (var oldConnection in oldConnections) transaction.Delete(oldConnection.Reference);
+
                 transaction.Create(newDbConnection, new
                 {
                     pubKey = connection.PublicKey,
@@ -87,20 +85,9 @@ namespace OwnID.Integrations.Firebase.Handlers
                     userId = did,
                     authType = connection.AuthType
                 });
-                
+
                 return Task.CompletedTask;
             });
-        }
-
-        public async Task RemoveConnectionsAsync(string publicKey)
-        {
-            var connections = await _firebaseContext.Db.Collection(Constants.CollectionName)
-                .WhereEqualTo(Constants.PublicKeyFieldName, publicKey).GetSnapshotAsync();
-
-            if (connections.Count == 0)
-                return;
-
-            await connections[0].Reference.DeleteAsync();
         }
     }
 }
