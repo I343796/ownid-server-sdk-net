@@ -73,6 +73,8 @@ namespace OwnID.Configuration
         public string Name { get; set; }
 
         public string Icon { get; set; }
+        
+        public Uri LogoUrl { get; set; }
 
         public string Description { get; set; }
 

@@ -129,6 +129,8 @@ namespace OwnID.Server
                     x.Name = ownIdSection["name"];
                     x.Description = ownIdSection["description"];
                     x.Icon = ownIdSection["icon"];
+                    var logoUrl = ownIdSection["logo"];
+                    x.LogoUrl = !string.IsNullOrEmpty(logoUrl) ? new Uri(logoUrl) : null;
                     x.CallbackUrl = new Uri(ownIdSection["callback_url"]);
                     x.TopDomain = topDomain;
 
