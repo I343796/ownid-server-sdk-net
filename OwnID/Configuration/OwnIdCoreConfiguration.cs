@@ -15,7 +15,7 @@ namespace OwnID.Configuration
     ///     Implements <see cref="IDisposable" />
     /// </remarks>
     /// <inheritdoc cref="IOwnIdCoreConfiguration" />
-    public class OwnIdCoreConfiguration : IOwnIdCoreConfiguration, IDisposable
+    public class OwnIdCoreConfiguration : IOwnIdCoreConfiguration
     {
         private string _did;
         private string _cookieReference;
@@ -38,18 +38,6 @@ namespace OwnID.Configuration
         {
             OwnIdApplicationUrl = new Uri(Constants.OwinIdApplicationAddress);
             ProfileConfiguration = new ProfileConfiguration(profileType);
-        }
-
-        // public string RegisterInstructions { get; set; }
-        //
-        // public string LoginInstructions { get; set; }
-
-        /// <summary>
-        ///     Disposes <see cref="JwtSignCredentials" />
-        /// </summary>
-        public void Dispose()
-        {
-            JwtSignCredentials?.Dispose();
         }
 
         public Uri OwnIdApplicationUrl { get; set; }

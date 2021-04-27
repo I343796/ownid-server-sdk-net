@@ -171,6 +171,9 @@ namespace OwnID.Server.Metrics
 
         private async Task SendDataToAwsAsync(List<MetricDatum> metrics)
         {
+            if (metrics == null || metrics.Count <= 0)
+                return;
+            
             var request = new PutMetricDataRequest
             {
                 MetricData = metrics,
