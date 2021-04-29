@@ -34,8 +34,6 @@ namespace OwnID.Commands.Recovery
         {
             var userData = _jwtService.GetDataFromJwt<UserProfileData>(jwtContainer.Jwt).Data;
 
-            await _recoveryHandler.RemoveConnectionsAsync(userData.PublicKey);
-
             // TODO: remove? classic flow
             if (!_coreConfiguration.OverwriteFields)
                 userData.Profile = null;
@@ -43,7 +41,7 @@ namespace OwnID.Commands.Recovery
             // TODO: code duplication
             var recoveryToken = !string.IsNullOrEmpty(userData.RecoveryData) ? Guid.NewGuid().ToString("N") : null;
 
-            await _recoveryHandler.OnRecoverAsync(userData.DID, new OwnIdConnection
+            await _recoveryHandler.ReplaceWithNewConnectionAsync(userData.DID, new OwnIdConnection
             {
                 PublicKey = userData.PublicKey,
                 RecoveryToken = recoveryToken,

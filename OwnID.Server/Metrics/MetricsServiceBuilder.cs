@@ -12,28 +12,19 @@ namespace OwnID.Server.Metrics
     {
         public static void AddMetrics(this IServiceCollection services, IConfiguration configuration)
         {
-            var metricsSection = configuration.GetSection("Metrics");
-            var awsSection = configuration.GetSection("AWS");
-            var metricsConfig = metricsSection.Get<MetricsConfiguration>();
-            var awsConfig = awsSection.Get<AwsConfiguration>();
-
+            var metricsConfig = configuration.GetSection("Metrics").Get<MetricsConfiguration>();
             if (!metricsConfig?.Enable ?? true)
                 return;
 
-            if (string.IsNullOrWhiteSpace(metricsConfig.Namespace))
-                throw new InvalidOperationException(
-                    $"{nameof(metricsConfig.Namespace)} for metrics config is required");
-
+            var awsConfig = configuration.GetSection("AWS").Get<AwsConfiguration>();
             if (string.IsNullOrWhiteSpace(awsConfig?.Region) || string.IsNullOrWhiteSpace(awsConfig.AccessKeyId)
                                                              || string.IsNullOrWhiteSpace(awsConfig.SecretAccessKey))
                 throw new InvalidOperationException(
                     "Valid AWS config is required for metrics services");
- 
-            if (metricsConfig.Interval == default)
-                metricsConfig.Interval = 60000;
 
-            if (metricsConfig.EventsThreshold == default)
-                metricsConfig.EventsThreshold = 100;
+            var validator = new MetricsConfigurationValidator();
+            validator.FillEmptyWithOptional(metricsConfig);
+            validator.Validate(metricsConfig);
 
             services.TryAddSingleton(awsConfig);
             services.TryAddSingleton(metricsConfig);

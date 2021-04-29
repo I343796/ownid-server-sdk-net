@@ -74,6 +74,11 @@ namespace OwnID.Extensibility.Configuration
         ///     data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==
         /// </example>
         public string Icon { get; set; }
+        
+        /// <summary>
+        ///     Logo url of organization / website that will be shown to end user on passwordless page
+        /// </summary>
+        public Uri LogoUrl { get; set; }
 
         /// <summary>
         ///     Description text that will be shown near the <see cref="Name" /> on OwnId application page for end-user

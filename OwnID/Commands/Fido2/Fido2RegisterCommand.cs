@@ -4,6 +4,7 @@ using Fido2NetLib.Objects;
 using OwnID.Extensibility.Cache;
 using OwnID.Extensibility.Configuration;
 using OwnID.Extensibility.Exceptions;
+using OwnID.Extensibility.Flow.Contracts.Cookies;
 using OwnID.Extensibility.Flow.Contracts.Fido2;
 using OwnID.Extensibility.Json;
 using OwnID.Extensibility.Providers;
@@ -90,6 +91,7 @@ namespace OwnID.Commands.Fido2
                 item.FinishFlow(relatedItem.DID, publicKey);
                 item.Fido2SignatureCounter = signatureCounter;
                 item.Fido2CredentialId = credentialId;
+                item.AuthCookieType = CookieType.Fido2;
             });
         }
     }

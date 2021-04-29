@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -15,7 +16,18 @@ namespace OwnID.Server.Metrics
     public class AwsEventsMetricsService : IEventsMetricsService, IDisposable
     {
         private const int TimerInterval = 5 * 1000;
-        
+
+        /// <summary>
+        ///     Maximum number of Metrics Datum elements sent within one call
+        /// </summary>
+        /// <remarks>
+        ///     From AWS Documentation:
+        ///     <code>MetricData.member.N</code>
+        ///     The data for the metric. The array can include no more than 20 metrics per call.
+        ///     https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricData.html
+        /// </remarks>
+        private const int MaximumNumberOfDataForMetric = 20;
+
         private readonly struct Metric
         {
             public DateTime Date { get; }
@@ -36,11 +48,14 @@ namespace OwnID.Server.Metrics
         private DateTime _lastUpdatedTime = DateTime.UtcNow;
         private readonly AmazonCloudWatchClient _amazonCloudWatchClient;
 
-        private readonly ConcurrentQueue<Metric> _loggedData = new ConcurrentQueue<Metric>();
+        private readonly ConcurrentQueue<MetricDatum> _customMetrics = new();
+
+        private readonly ConcurrentQueue<Metric> _loggedData = new();
 
         private bool ShouldProcess =>
-            _loggedData.Count != 0
-            && (_loggedData.Count > _metricsConfiguration.EventsThreshold || DateTime.UtcNow - _lastUpdatedTime >= _updateInterval);
+            (!_loggedData.IsEmpty || !_customMetrics.IsEmpty)
+            && (_loggedData.Count > _metricsConfiguration.EventsThreshold
+                || DateTime.UtcNow - _lastUpdatedTime >= _updateInterval);
 
         public AwsEventsMetricsService(AwsConfiguration awsConfiguration, MetricsConfiguration metricsConfiguration,
             ILogger<AwsEventsMetricsService> logger)
@@ -96,11 +111,34 @@ namespace OwnID.Server.Metrics
                         sendBatchTasks.Add(SendBatchAsync(items));
                     }
 
+                    //
+                    // TODO: Optimize data send to the AWS by grouping
+                    //
+                    process = true;
+                    while (process)
+                    {
+                        var batch = new List<MetricDatum>(_metricsConfiguration.EventsThreshold);
+                        for (var i = 0; i < MaximumNumberOfDataForMetric; i++)
+                        {
+                            if (!_customMetrics.TryDequeue(out var awsMetricDatum))
+                            {
+                                process = false;
+                                break;
+                            }
+
+                            batch.Add(awsMetricDatum);
+                        }
+
+                        _logger.LogDebug("Sending '{BatchCount}' custom metrics events to AWS", batch.Count);
+
+                        sendBatchTasks.Add(SendDataToAwsAsync(batch));
+                    }
+
                     Task.WaitAll(sendBatchTasks.ToArray());
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogError(ex, "Error while processing AWS metrics");
                 }
             }
         }
@@ -127,11 +165,15 @@ namespace OwnID.Server.Metrics
                 Value = metrics[key]
             }).ToList();
 
+
             await SendDataToAwsAsync(awsMetrics);
         }
 
         private async Task SendDataToAwsAsync(List<MetricDatum> metrics)
         {
+            if (metrics == null || metrics.Count <= 0)
+                return;
+            
             var request = new PutMetricDataRequest
             {
                 MetricData = metrics,
@@ -188,6 +230,43 @@ namespace OwnID.Server.Metrics
         {
             return LogAsync($"{eventType} canceled");
         }
+
+        public Task LogTimeAsync(string name, TimeSpan duration)
+        {
+            _customMetrics.Enqueue(new MetricDatum
+            {
+                MetricName = name,
+                TimestampUtc = DateTime.UtcNow,
+                Unit = StandardUnit.Milliseconds,
+                Value = duration.TotalMilliseconds
+            });
+
+            return Task.CompletedTask;
+        }
+
+        public IDisposable MeasureTime(string name)
+        {
+            return new TimeLogger(duration => { LogTimeAsync(name, duration).Wait(); });
+        }
+
+        private class TimeLogger : IDisposable
+        {
+            private readonly Action<TimeSpan> _action;
+            private readonly Stopwatch _stopwatch;
+
+            public TimeLogger(Action<TimeSpan> action)
+            {
+                _action = action;
+                _stopwatch = Stopwatch.StartNew();
+            }
+
+            public void Dispose()
+            {
+                _stopwatch.Stop();
+                _action(_stopwatch.Elapsed);
+            }
+        }
+
 
         private Task LogAsync(string metricName)
         {

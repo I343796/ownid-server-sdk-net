@@ -148,7 +148,7 @@ namespace OwnID.Integrations.Firebase.Handlers
                 .GetSnapshotAsync();
 
             var result = new UserSettings();
-            
+
             if (!connection.Exists)
                 return result;
 
@@ -167,7 +167,7 @@ namespace OwnID.Integrations.Firebase.Handlers
         public async Task UpgradeConnectionAsync(string publicKey, OwnIdConnection newConnection)
         {
             var oldConnectionQuery = _firebaseContext.Db.Collection(Constants.CollectionName)
-                .Document(publicKey.ToSha256());
+                .Document(publicKey.ToSha256().ReplaceSpecPathSymbols());
             var oldConnectionSnapshot = await oldConnectionQuery.GetSnapshotAsync();
 
             if (!oldConnectionSnapshot.Exists)
@@ -180,7 +180,8 @@ namespace OwnID.Integrations.Firebase.Handlers
                     ? newConnection.PublicKey.ToSha256()
                     : newConnection.Fido2CredentialId;
 
-                var newDbConnection = _firebaseContext.Db.Collection(Constants.CollectionName).Document(connectionId.ReplaceSpecPathSymbols());
+                var newDbConnection = _firebaseContext.Db.Collection(Constants.CollectionName)
+                    .Document(connectionId.ReplaceSpecPathSymbols());
                 transaction.Create(newDbConnection, new
                 {
                     pubKey = newConnection.PublicKey,
@@ -190,9 +191,9 @@ namespace OwnID.Integrations.Firebase.Handlers
                     fido2CredentialId = newConnection.Fido2CredentialId,
                     fido2SignatureCounter = newConnection.Fido2SignatureCounter,
                     userId = oldConnectionSnapshot.GetValue<string>(Constants.UserIdFieldName),
-                    authType = newConnection.AuthType
+                    authType = newConnection.AuthType.ToString()
                 });
-                
+
                 return Task.CompletedTask;
             });
         }

@@ -17,22 +17,14 @@ namespace OwnID.Extensibility.Flow.Abstractions
         ///     A task that represents the asynchronous recover operation.
         ///     The task result contains <see cref="AccountRecoveryResult" />
         /// </returns>
-        /// <exception cref="RecoveryTokenExpiredException">Thrown when recovery token expired</exception>
         Task<AccountRecoveryResult> RecoverAsync(string accountRecoveryPayload);
 
         /// <summary>
-        ///     Operation to be run after successful account recover
+        ///     Replace all users connections with new one after successful recovery
         /// </summary>
         /// <returns>
         ///     A task that represents the asynchronous recover operation.
         /// </returns>
-        Task OnRecoverAsync(string did, OwnIdConnection connection);
-
-        /// <summary>
-        ///     Remove existing connections from existing users
-        /// </summary>
-        /// <param name="publicKey">public key to be cleared</param>
-        /// <returns>A task that represents the asynchronous remove operation.</returns>
-        Task RemoveConnectionsAsync(string publicKey);
+        Task ReplaceWithNewConnectionAsync(string did, OwnIdConnection connection);
     }
 }

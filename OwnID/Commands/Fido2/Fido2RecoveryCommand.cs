@@ -27,7 +27,7 @@ namespace OwnID.Commands.Fido2
             string publicKey,
             uint signatureCounter, string credentialId)
         {
-            await _recoveryHandler.OnRecoverAsync(relatedItem.DID, new OwnIdConnection
+            await _recoveryHandler.ReplaceWithNewConnectionAsync(relatedItem.DID, new OwnIdConnection
             {
                 PublicKey = publicKey,
                 Fido2CredentialId = credentialId,

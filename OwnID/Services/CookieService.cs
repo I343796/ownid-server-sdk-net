@@ -54,13 +54,24 @@ namespace OwnID.Services
             var result = new List<CookieInfo>();
 
             if (!string.IsNullOrEmpty(cacheItem.EncKey) && !string.IsNullOrEmpty(cacheItem.EncVector))
-                result.Add(CreateCookie(EncryptionCookieName,
-                    FormatVersionedCookieValue(cacheItem.AuthCookieType,
-                        new[] {cacheItem.EncKey, cacheItem.EncVector})));
+            {
+                if (cacheItem.AuthCookieType != CookieType.Fido2)
+                    result.Add(CreateCookie(EncryptionCookieName,
+                        FormatVersionedCookieValue(cacheItem.AuthCookieType,
+                            new[] {cacheItem.EncKey, cacheItem.EncVector})));
+                else
+                    result.Add(DeleteCookie(EncryptionCookieName));
+            }
+
 
             if (!string.IsNullOrEmpty(cacheItem.RecoveryToken))
-                result.Add(CreateCookie(RecoveryCookieName,
-                    FormatVersionedCookieValue(CookieType.Recovery, cacheItem.RecoveryToken)));
+            {
+                if (cacheItem.AuthCookieType != CookieType.Fido2)
+                    result.Add(CreateCookie(RecoveryCookieName,
+                        FormatVersionedCookieValue(CookieType.Recovery, cacheItem.RecoveryToken)));
+                else
+                    result.Add(DeleteCookie(RecoveryCookieName));
+            }
 
             if (!string.IsNullOrEmpty(cacheItem.Fido2CredentialId))
                 result.Add(CreateCookie(CredIdCookieName,

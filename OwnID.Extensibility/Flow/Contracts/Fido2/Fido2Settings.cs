@@ -15,5 +15,7 @@ namespace OwnID.Extensibility.Flow.Contracts.Fido2
         public string CallbackUrl { get; set; }
         
         public string LogLevel { get; set; }
+        
+        public string LogoUrl { get; set; }
     }
 }

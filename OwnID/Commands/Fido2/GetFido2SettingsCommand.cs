@@ -46,7 +46,8 @@ namespace OwnID.Commands.Fido2
                 RelyingPartyId = _ownIdCoreConfiguration.Fido2.RelyingPartyId,
                 RelyingPartyName = _ownIdCoreConfiguration.Fido2.RelyingPartyName,
                 CallbackUrl = url.ToString(),
-                LogLevel = ((int) _ownIdCoreConfiguration.LogLevel).ToString()
+                LogLevel = ((int) _ownIdCoreConfiguration.LogLevel).ToString(),
+                LogoUrl = _ownIdCoreConfiguration.LogoUrl?.ToString()
             };
         }
     }

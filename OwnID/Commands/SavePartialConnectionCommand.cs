@@ -52,6 +52,7 @@ namespace OwnID.Commands
             await _cacheItemRepository.UpdateAsync(relatedItem.Context, item =>
             {
                 item.ChallengeType = relatedItem.ChallengeType;
+                item.AuthCookieType = relatedItem.AuthCookieType;
                 item.RecoveryToken = recoveryToken;
                 item.RecoveryData = input.RecoveryData;
                 item.FinishFlow(input.DID, input.PublicKey);
