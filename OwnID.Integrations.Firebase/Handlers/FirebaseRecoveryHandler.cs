@@ -83,7 +83,7 @@ namespace OwnID.Integrations.Firebase.Handlers
                     fido2CredentialId = connection.Fido2CredentialId,
                     fido2SignatureCounter = connection.Fido2SignatureCounter,
                     userId = did,
-                    authType = connection.AuthType
+                    authType = connection.AuthType.ToString()
                 });
 
                 return Task.CompletedTask;

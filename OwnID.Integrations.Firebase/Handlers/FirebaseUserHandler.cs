@@ -191,7 +191,7 @@ namespace OwnID.Integrations.Firebase.Handlers
                     fido2CredentialId = newConnection.Fido2CredentialId,
                     fido2SignatureCounter = newConnection.Fido2SignatureCounter,
                     userId = oldConnectionSnapshot.GetValue<string>(Constants.UserIdFieldName),
-                    authType = newConnection.AuthType
+                    authType = newConnection.AuthType.ToString()
                 });
 
                 return Task.CompletedTask;

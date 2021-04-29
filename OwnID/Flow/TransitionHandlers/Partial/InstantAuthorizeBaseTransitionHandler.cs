@@ -69,7 +69,7 @@ namespace OwnID.Flow.TransitionHandlers.Partial
 
             // Check if user settings override global one
             var settings = await _userHandlerAdapter.GetUserSettingsAsync(userData.PublicKey);
-            if (_configuration.TFAEnabled && (settings?.EnforceTFA ?? false)
+            if (!_configuration.TFAEnabled && (settings?.EnforceTFA ?? false)
                                           && userData.AuthType == ConnectionAuthType.Basic)
                 return await SwitchConnectionAuthTypeAsync(relatedItem, input, userData.SupportsFido2,
                     userData.PublicKey);
