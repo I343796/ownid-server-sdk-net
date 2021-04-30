@@ -7,6 +7,7 @@ spec:
     spec:
       imagePullSecrets:
         - name: regcred
+      serviceAccountName: ownid-single-serviceaccount
       containers:
         - name: single-server
           image: single-server:latest
