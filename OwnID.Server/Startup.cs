@@ -17,6 +17,7 @@ using OwnID.Server.Middlewares.SecurityHeaders;
 using OwnID.Web;
 using OwnID.Integrations.Gigya;
 using OwnID.Server.Metrics;
+using OwnID.Server.Middlewares.Logs;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using ConfigInjectionMiddleware = OwnID.Server.Middlewares.ConfigInjectionMiddleware;

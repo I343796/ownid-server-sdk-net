@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Json;
 using OwnID.Extensibility.Logs;
 
-namespace OwnID.Server
+namespace OwnID.Server.Middlewares.Logs
 {
     public class LogRequestMiddleware
     {

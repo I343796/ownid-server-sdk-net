@@ -6,12 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Json;
 using OwnID.Extensibility.Logs;
+using OwnID.Web.Middlewares;
 using Serilog.Context;
 using Serilog.Core.Enrichers;
 
-namespace OwnID.Server
+namespace OwnID.Server.Middlewares.Logs
 {
-    public class LogMiddleware
+    public class LogMiddleware : IOwnIDMiddleware
     {
         private readonly ILogger<LogMiddleware> _logger;
         private readonly RequestDelegate _next;
@@ -38,7 +39,7 @@ namespace OwnID.Server
                 if (!Enum.TryParse(logMessage.LogLevel, true, out LogLevel logLevel))
                     logLevel = LogLevel.Debug;
 
-                using (_logger.BeginScope($"context: {context}", logMessage.Context))
+                using (_logger.BeginScope(new {context = logMessage.Context}))
                 {
                     _logger.LogWithData(logLevel, logMessage.Message, logMessage.Data);
                 }
