@@ -1,4 +1,4 @@
-namespace OwnID.Server.Metrics
+namespace OwnID.Server.Services.Metrics
 {
     public class AwsConfiguration
     {
