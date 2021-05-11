@@ -11,8 +11,9 @@ using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Cache;
 using OwnID.Extensibility.Logs;
 using OwnID.Redis;
+using OwnID.Server.Services.Metrics;
 
-namespace OwnID.Server.Metrics
+namespace OwnID.Server.Services
 {
     public class TelemetryLogService : IHostedService, IDisposable
     {

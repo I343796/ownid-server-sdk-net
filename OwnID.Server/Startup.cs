@@ -16,13 +16,13 @@ using OwnID.Redis;
 using OwnID.Server.Middlewares.SecurityHeaders;
 using OwnID.Web;
 using OwnID.Integrations.Gigya;
-using OwnID.Server.Metrics;
 using OwnID.Server.Middlewares.Logs;
+using OwnID.Server.Services.Metrics;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using ConfigInjectionMiddleware = OwnID.Server.Middlewares.ConfigInjectionMiddleware;
 using SecurityHeadersBuilder = OwnID.Server.Middlewares.SecurityHeaders.SecurityHeadersBuilder;
-using TelemetryLogService = OwnID.Server.Metrics.TelemetryLogService;
+using TelemetryLogService = OwnID.Server.Services.TelemetryLogService;
 
 namespace OwnID.Server
 {

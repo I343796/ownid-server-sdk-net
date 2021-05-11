@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OwnID.Extensibility.Metrics;
 using OwnID.Web.Middlewares;
 
-namespace OwnID.Server.Metrics
+namespace OwnID.Server.Services.Metrics
 {
     public static class MetricsServiceBuilder
     {
@@ -29,14 +29,18 @@ namespace OwnID.Server.Metrics
             services.TryAddSingleton(awsConfig);
             services.TryAddSingleton(metricsConfig);
             services.TryAddSingleton<IEventsMetricsService, AwsEventsMetricsService>();
+            services.TryAddSingleton<IEventAggregator, EventAggregator>();
+            services.TryAddSingleton<IMetricsWorker, MetricsWorker>();
         }
 
         public static void UseMetrics(this IApplicationBuilder app)
         {
-            var metricsService = app.ApplicationServices.GetService<IEventsMetricsService>();
+            var metricsWorker = app.ApplicationServices.GetService<IMetricsWorker>();
 
-            if (metricsService == null)
+            if (metricsWorker == null)
                 return;
+            
+            metricsWorker.Start();
 
             app.UseMiddleware<MetricsMiddleware>();
         }

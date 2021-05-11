@@ -1,19 +1,8 @@
 using System;
 using OwnID.Extensibility.Configuration.Validators;
 
-namespace OwnID.Server.Metrics
+namespace OwnID.Server.Services.Metrics
 {
-    public class MetricsConfiguration
-    {
-        public bool Enable { get; set; }
-        
-        public string Namespace { get; set; }
-        
-        public uint Interval { get; set; }
-        
-        public int EventsThreshold { get; set; }
-    }
-
     public class MetricsConfigurationValidator : IConfigurationValidator<MetricsConfiguration>
     {
         public void FillEmptyWithOptional(MetricsConfiguration configuration)

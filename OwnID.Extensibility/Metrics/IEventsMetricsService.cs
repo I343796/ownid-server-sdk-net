@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 namespace OwnID.Extensibility.Metrics
@@ -14,8 +13,5 @@ namespace OwnID.Extensibility.Metrics
         Task LogSwitchAsync(EventType eventType);
         
         Task LogCancelAsync(EventType eventType);
-
-        Task LogTimeAsync(string name, TimeSpan duration);
-        IDisposable MeasureTime(string name);
     }
 }
