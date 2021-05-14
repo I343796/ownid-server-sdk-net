@@ -12,12 +12,12 @@ namespace OwnID.Flow
             Locale = input.CultureInfo?.Name;
             IsDesktop = input.IsDesktop;
         }
-        
+
         /// <summary>
         ///     User data encryption key
         /// </summary>
         public string EncKey { get; set; }
-        
+
         /// <summary>
         ///     User data encryption vector
         /// </summary>
@@ -57,10 +57,16 @@ namespace OwnID.Flow
         ///     Include FIDO2 fallback behavior configuration
         /// </summary>
         public bool IncludeFido2FallbackBehavior { get; set; }
-        
+
         /// <summary>
         ///     Is desktop
         /// </summary>
         public bool IsDesktop { get; set; }
+
+
+        /// <summary>
+        ///     Cookies was set
+        /// </summary>
+        public bool CookiesSet { get; set; }
     }
 }

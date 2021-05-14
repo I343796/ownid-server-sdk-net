@@ -149,6 +149,8 @@ namespace OwnID.Flow
                 {"nextStep", stepDict}
             };
 
+            if (info.CookiesSet) fields.Add("cookiesSet", true);
+            
             if (data != null)
                 fields.Add("data", data);
 

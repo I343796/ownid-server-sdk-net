@@ -15,6 +15,7 @@ namespace OwnID.Server.WebApp.Controllers
     public class Cookies : ControllerBase
     {
         private readonly Regex _connectionIdRegex;
+        private readonly Regex _requesterRegex;
         private readonly WebAppOptions _webAppOptions;
 
         public Cookies(IOptions<WebAppOptions> webAppOptions)
@@ -22,6 +23,7 @@ namespace OwnID.Server.WebApp.Controllers
             _webAppOptions = webAppOptions.Value;
             _connectionIdRegex = new Regex(string.Format(CookieNameTemplates.Encryption, "(.*)"),
                 RegexOptions.Compiled);
+            _requesterRegex = new Regex("[()<>@,;:\\/\"[\\]?={}]+", RegexOptions.Compiled);
         }
 
         /// <summary>
@@ -110,6 +112,30 @@ namespace OwnID.Server.WebApp.Controllers
             }
 
             return Delete(name);
+        }
+
+        [HttpPost]
+        [Route("conversion")]
+        public IActionResult ConvertCookies(ConvertCookiesRequest request)
+        {
+            var cookiesOptions = new CookieOptions
+            {
+                Secure = !_webAppOptions.IsDevEnvironment,
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Domain = !_webAppOptions.IsDevEnvironment ? ".ownid.com" : "localhost",
+                Expires = DateTimeOffset.Now.AddYears(5)
+            };
+            
+            var cookieName = _requesterRegex.Replace(request.RequesterId, "-");
+
+            foreach (var cookie in Request.Cookies)
+            {
+                if (cookie.Key.EndsWith(cookieName))
+                    Response.Cookies.Append(cookie.Key, cookie.Value, cookiesOptions);
+            }
+
+            return Ok();
         }
 
         private CookieOptions GetCookieOptions(DateTime? expireAt = null)

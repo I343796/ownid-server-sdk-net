@@ -46,6 +46,7 @@ namespace OwnID.Flow.TransitionHandlers.Fido2
             var composeInfo = new BaseJwtComposeInfo(input)
             {
                 Behavior = GetNextBehaviorFunc(input, relatedItem),
+                CookiesSet = true
             };
 
             var jwt = JwtComposer.GenerateBaseStepJwt(composeInfo, relatedItem.DID);

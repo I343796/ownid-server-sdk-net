@@ -88,7 +88,8 @@ namespace OwnID.Flow.TransitionHandlers.Partial
             var composeInfo = new BaseJwtComposeInfo(input)
             {
                 EncKey = relatedItem.EncKey,
-                EncVector = relatedItem.EncVector
+                EncVector = relatedItem.EncVector,
+                CookiesSet = true
             };
 
             switch (relatedItem.NewAuthType)
@@ -114,7 +115,7 @@ namespace OwnID.Flow.TransitionHandlers.Partial
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
+            
             var jwt = JwtComposer.GenerateBaseStepJwt(composeInfo);
             return new StateResult(jwt, _cookieService.CreateAuthCookies(relatedItem));
         }
@@ -126,7 +127,8 @@ namespace OwnID.Flow.TransitionHandlers.Partial
 
             var composeInfo = new BaseJwtComposeInfo(input)
             {
-                Behavior = FrontendBehavior.CreateSuccessFinish(relatedItem.ChallengeType)
+                Behavior = FrontendBehavior.CreateSuccessFinish(relatedItem.ChallengeType),
+                CookiesSet = true
             };
 
             var jwt = JwtComposer.GenerateFinalStepJwt(composeInfo);

@@ -53,6 +53,7 @@ namespace OwnID.Flow.TransitionHandlers.Partial
             var composeInfo = new BaseJwtComposeInfo(input)
             {
                 Behavior = GetNextBehaviorFunc(input, relatedItem),
+                CookiesSet = true
             };
 
             var jwt = JwtComposer.GenerateFinalStepJwt(composeInfo);
