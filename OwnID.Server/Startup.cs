@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OwnID.Extensibility.Configuration;
 using OwnID.Integrations.Firebase;
+using OwnID.Integrations.IAS;
 using OwnID.Redis;
 using OwnID.Server.Middlewares.SecurityHeaders;
 using OwnID.Web;
@@ -93,6 +94,10 @@ namespace OwnID.Server
                     case "firebase":
                         var firebaseSection = Configuration.GetSection("firebase");
                         builder.UseFirebase(firebaseSection["credentials_json"]);
+                        break;
+                    case "ias":
+                        var iasConfiguration = Configuration.GetSection("ias");
+                        builder.UseIAS(iasConfiguration["public_key"], iasConfiguration["private_key"]);
                         break;
                     default:
                         var gigyaSection = Configuration.GetSection("gigya");
@@ -244,6 +249,11 @@ namespace OwnID.Server
                 routeBuilder.MapMiddlewarePut("/ownid/config-injection",
                     builder => builder.UseMiddleware<ConfigInjectionMiddleware>());
 
+            if (Configuration.GetSection("ownid").GetValue("integration", "gigya") == "ias")
+            {
+                routeBuilder.MapMiddlewareGet("ownid/certs",
+                    builder => builder.UseMiddleware<CertDiscovery>());
+            }
             app.UseRouter(routeBuilder.Build());
         }
 

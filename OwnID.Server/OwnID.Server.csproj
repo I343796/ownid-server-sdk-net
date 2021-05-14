@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OwnID.Integrations.Firebase\OwnID.Integrations.Firebase.csproj" />
     <ProjectReference Include="..\OwnID.Integrations.Gigya\OwnID.Integrations.Gigya.csproj" />
+    <ProjectReference Include="..\OwnID.Integrations.IAS\OwnID.Integrations.IAS.csproj" />
     <ProjectReference Include="..\OwnID.Redis\OwnID.Redis.csproj" />
     <ProjectReference Include="..\OwnID.Web.Extensibility\OwnID.Web.Extensibility.csproj" />
     <ProjectReference Include="..\OwnID.Web\OwnID.Web.csproj" />
